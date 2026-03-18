@@ -37,9 +37,8 @@ jobs:
   all-checks-passed:
     runs-on: ubuntu-slim
     if: "!cancelled() && github.event_name == 'pull_request'"
-#    needs:
-#      - lint
-#      - test
+    needs:
+      - required-meta
     steps:
       - run: |
           if [ "true" == "${{ contains(needs.*.result, 'failure') }}" ]
