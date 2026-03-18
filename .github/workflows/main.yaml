@@ -1,0 +1,47 @@
+name: Main
+
+on:
+  push:
+    branches: [ main ]
+  pull_request: { }
+
+permissions:
+  contents: read
+
+jobs:
+  required-meta:
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    uses: BlindfoldedSurgery/actions-meta/.github/workflows/required.yml@v2
+
+  lint:
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/lint.yml@v6
+    with:
+      build-tool: uv
+      python-version: '3.14'
+      debian-version: trixie
+
+  test:
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/test.yml@v6
+    with:
+      build-tool: uv
+      python-version: '3.14'
+      debian-version: trixie
+
+  all-checks-passed:
+    runs-on: ubuntu-slim
+    if: "!cancelled() && github.event_name == 'pull_request'"
+    needs:
+      - lint
+      - test
+    steps:
+      - run: |
+          if [ "true" == "${{ contains(needs.*.result, 'failure') }}" ]
+          then
+            echo "A required job failed"
+            exit 1
+          else
+            echo "All required jobs passed"
+          fi

@@ -1,0 +1,34 @@
+[project]
+name = "s3-compatible-backups"
+version = "0.1.0"
+requires-python = ">=3.14.2,<3.15"
+authors = [{ name = "Björn Petersen", email = "git@bjoernpetersen.net" }]
+classifiers = [
+    "Private :: Do Not Upload",
+]
+
+dependencies = [
+    "aiobotocore>=3.3.0,<4.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "homeassistant==2026.3.2",
+    "mypy ==1.19.*",
+    "pytest >=9.0.0, <9.1.0",
+    "pytest-asyncio>=1.2.0",
+    "ruff ==0.15.6",
+]
+
+[build-system]
+requires = ["uv_build==0.10.10"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = "custom_components"
+
+[tool.pytest]
+strict = true
+addopts = [
+    "--import-mode=importlib",
+]
