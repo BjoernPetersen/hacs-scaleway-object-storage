@@ -74,7 +74,7 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 }
             )
 
-            if self._test_connection(errors=errors, config=user_input):
+            if await self._test_connection(errors=errors, config=user_input):
                 return self.async_create_entry(
                     title=f"Scaleway - {user_input[CONF_BUCKET]}",
                     data=user_input,
