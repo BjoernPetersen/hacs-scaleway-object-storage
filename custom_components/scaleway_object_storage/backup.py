@@ -58,7 +58,7 @@ class ScalewayBackupAgent(BackupAgent):
 
     def __init__(self, hass: HomeAssistant, entry: ScalewayConfigEntry) -> None:
         super().__init__()
-        self.name = entry.title
+        self.name = f"Scaleway - {entry.title}"
         self.unique_id = entry.entry_id
 
         self._hass = hass
