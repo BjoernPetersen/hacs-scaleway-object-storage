@@ -29,6 +29,10 @@ async def async_get_backup_agents(
     entries: list[ScalewayConfigEntry] = hass.config_entries.async_loaded_entries(
         DOMAIN
     )
+    if not entries:
+        _LOGGER.debug("No config entries loaded")
+        return []
+
     return [ScalewayBackupAgent(hass, entry) for entry in entries]
 
 
