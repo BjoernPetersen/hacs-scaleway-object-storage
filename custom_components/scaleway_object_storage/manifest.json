@@ -18,6 +18,6 @@
     "aiobotocore"
   ],
   "requirements": [
-    "aiobotocore>=3.3.0,<4"
+    "aiobotocore==3.3.0"
   ]
 }

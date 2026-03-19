@@ -1,0 +1,53 @@
+{
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Cannot connect to Scaleway service."
+    },
+    "invalid_auth": {
+      "message": "The provided access key and secret key are invalid."
+    },
+    "invalid_bucket_name": {
+      "message": "Invalid bucket name."
+    },
+    "validation_failed": {
+      "message": "Server-side validation failed."
+    }
+  },
+  "config": {
+    "abort": {
+      "already_configured": "Account is already configured"
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to Scaleway service.",
+      "invalid_auth": "The provided access key and secret key are invalid.",
+      "invalid_bucket_name": "Invalid bucket name.",
+      "validation_failed": "Server-side validation failed."
+    },
+    "selector": {
+      "regions": {
+        "options": {
+          "fr-par": "Paris, France",
+          "nl-ams": "Amsterdam, Netherlands",
+          "pl-waw": "Warsaw, Poland",
+          "it-mil": "Milan, Italy"
+        }
+      }
+    },
+    "step": {
+      "user": {
+        "data": {
+          "access_key_id": "Access Key ID",
+          "secret_key": "Secret Key",
+          "region": "Region",
+          "bucket": "Bucket name",
+          "object_prefix": "Object prefix"
+        },
+        "data_description": {
+          "bucket": "Bucket must already exist and be writable using the provided credentials.",
+          "object_prefix": "A prefix that will be added to every object key."
+        },
+        "title": "Add Scaleway Object Storage bucket"
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ from homeassistant.helpers.selector import (
 from . import helpers
 from .const import (
     DOMAIN,
-    CONF_ACCESS_KEY,
+    CONF_ACCESS_KEY_ID,
     CONF_SECRET_KEY,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,
@@ -25,18 +25,19 @@ from homeassistant.helpers import config_validation as cv
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_ACCESS_KEY): cv.string,
+        vol.Required(CONF_ACCESS_KEY_ID): cv.string,
         vol.Required(CONF_SECRET_KEY): TextSelector(
             TextSelectorConfig(type=TextSelectorType.PASSWORD)
         ),
         vol.Required(CONF_REGION, default="fr-par"): SelectSelector(
             SelectSelectorConfig(
+                translation_key="regions",
                 options=[
                     "fr-par",
                     "nl-ams",
                     "pl-waw",
                     "it-mil",
-                ]
+                ],
             )
         ),
         vol.Required(CONF_BUCKET): cv.string,
@@ -53,14 +54,12 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config: dict[str, Any],
     ) -> bool:
         async with helpers.create_client(config) as client:
-            try:
-                client.head_bucket(Bucket=config[CONF_BUCKET])
-                return True
-            except Exception:
-                # TODO: add more specific exception clauses and real errors
-                errors["base"] = "something"
+            error_code = await helpers.check_connection(client, config)
+            if error_code:
+                errors["base"] = error_code
+                return False
 
-        return False
+        return True
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
