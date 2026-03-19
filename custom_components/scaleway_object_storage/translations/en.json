@@ -13,6 +13,16 @@
       "message": "Server-side validation failed."
     }
   },
+  "selector": {
+    "regions": {
+      "options": {
+        "fr-par": "Paris, France",
+        "nl-ams": "Amsterdam, Netherlands",
+        "pl-waw": "Warsaw, Poland",
+        "it-mil": "Milan, Italy"
+      }
+    }
+  },
   "config": {
     "abort": {
       "already_configured": "Account is already configured"
@@ -22,16 +32,6 @@
       "invalid_auth": "The provided access key and secret key are invalid.",
       "invalid_bucket_name": "Invalid bucket name.",
       "validation_failed": "Server-side validation failed."
-    },
-    "selector": {
-      "regions": {
-        "options": {
-          "fr-par": "Paris, France",
-          "nl-ams": "Amsterdam, Netherlands",
-          "pl-waw": "Warsaw, Poland",
-          "it-mil": "Milan, Italy"
-        }
-      }
     },
     "step": {
       "user": {
