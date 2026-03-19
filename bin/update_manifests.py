@@ -15,6 +15,7 @@ def update_hacs(base_dir: Path) -> None:
         file.seek(0)
         file.truncate()
         json.dump(data, file, indent=2)
+        file.write("\n")
 
 
 def update_manifest(base_dir: Path) -> None:
