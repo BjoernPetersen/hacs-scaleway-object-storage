@@ -1,27 +1,28 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
-    SelectSelector,
-    SelectSelectorConfig,
 )
 
 from . import helpers
 from .const import (
-    DOMAIN,
     CONF_ACCESS_KEY_ID,
-    CONF_SECRET_KEY,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,
     CONF_REGION,
+    CONF_SECRET_KEY,
+    DOMAIN,
 )
 
-import voluptuous as vol
-from homeassistant.helpers import config_validation as cv
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigFlowResult
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {

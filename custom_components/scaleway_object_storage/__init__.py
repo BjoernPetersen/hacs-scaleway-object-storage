@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryError
 
 from . import helpers
-from .const import DOMAIN, DATA_BACKUP_AGENT_LISTENERS
+from .const import DATA_BACKUP_AGENT_LISTENERS, DOMAIN
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
     from types_aiobotocore_s3.client import S3Client
 
 type ScalewayConfigEntry = ConfigEntry[S3Client]

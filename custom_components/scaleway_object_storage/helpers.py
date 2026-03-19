@@ -1,18 +1,19 @@
-from collections.abc import Mapping
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from aiobotocore.session import AioSession
-from botocore.exceptions import ClientError, ParamValidationError, ConnectionError
+from botocore.exceptions import ClientError, ConnectionError, ParamValidationError
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from aiobotocore.session import ClientCreatorContext
     from types_aiobotocore_s3.client import S3Client
 
 from .const import (
-    CONF_REGION,
     CONF_ACCESS_KEY_ID,
-    CONF_SECRET_KEY,
     CONF_BUCKET,
+    CONF_REGION,
+    CONF_SECRET_KEY,
 )
 
 

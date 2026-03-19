@@ -1,7 +1,9 @@
-from collections.abc import Callable
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 from homeassistant.util.hass_dict import HassKey
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 DOMAIN: Final = "scaleway_object_storage"
 

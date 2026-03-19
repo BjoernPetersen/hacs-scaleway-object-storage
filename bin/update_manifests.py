@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 from importlib import metadata
+from pathlib import Path
 
 
 def update_hacs(base_dir: Path) -> None:

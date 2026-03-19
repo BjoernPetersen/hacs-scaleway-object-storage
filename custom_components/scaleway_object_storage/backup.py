@@ -1,23 +1,27 @@
 import asyncio
 import logging
-from collections.abc import Awaitable, AsyncGenerator
-from typing import Any, Callable, AsyncIterator
+from typing import TYPE_CHECKING, Any
 
 from botocore.exceptions import BotoCoreError
-from homeassistant.components.backup import BackupAgent, AgentBackup, suggested_filename
+from homeassistant.components.backup import AgentBackup, BackupAgent, suggested_filename
 from homeassistant.core import HomeAssistant, callback
-from types_aiobotocore_s3.type_defs import CompletedPartTypeDef
 
-from . import ScalewayConfigEntry
 from .const import (
-    DOMAIN,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,
+    DATA_BACKUP_AGENT_LISTENERS,
+    DOMAIN,
+    MAX_PARALLEL_REQUESTS,
     MULTIPART_MIN_SIZE,
     MULTIPART_PART_SIZE,
-    MAX_PARALLEL_REQUESTS,
-    DATA_BACKUP_AGENT_LISTENERS,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
+
+    from types_aiobotocore_s3.type_defs import CompletedPartTypeDef
+
+    from . import ScalewayConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
