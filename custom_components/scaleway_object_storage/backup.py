@@ -113,12 +113,13 @@ class ScalewayBackupAgent(BackupAgent):
         buffer = bytearray(backup.size)
         async for chunk in stream:
             buffer.extend(chunk)
+
         await self._client.put_object(
             Bucket=self._bucket,
             Key=key,
             Metadata=backup.as_dict(),
             ContentDisposition=suggested_filename(backup),
-            Body=buffer,
+            Body=bytes(buffer),
         )
 
     @staticmethod
