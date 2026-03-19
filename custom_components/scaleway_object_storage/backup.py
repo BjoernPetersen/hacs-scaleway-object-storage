@@ -54,7 +54,13 @@ def async_register_backup_agents_listener(
 
 
 class ScalewayBackupAgent(BackupAgent):
+    domain = DOMAIN
+
     def __init__(self, hass: HomeAssistant, entry: ScalewayConfigEntry) -> None:
+        super().__init__()
+        self.name = entry.title
+        self.unique_id = entry.entry_id
+
         self._hass = hass
         self._client = entry.runtime_data
         self._bucket = entry.data[CONF_BUCKET]
