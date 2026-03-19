@@ -1,11 +1,13 @@
 from collections.abc import Mapping
 from typing import Any, TYPE_CHECKING
 
-from aiobotocore.session import AioSession, ClientCreatorContext
+from aiobotocore.session import AioSession
 from botocore.exceptions import ClientError, ParamValidationError, ConnectionError
 
 if TYPE_CHECKING:
+    from aiobotocore.session import ClientCreatorContext
     from types_aiobotocore_s3.client import S3Client
+
 from .const import (
     CONF_REGION,
     CONF_ACCESS_KEY_ID,
