@@ -4,8 +4,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryError
 
-from scaleway_object_storage import helpers
-from scaleway_object_storage.const import DOMAIN, DATA_BACKUP_AGENT_LISTENERS
+from . import helpers
+from .const import DOMAIN, DATA_BACKUP_AGENT_LISTENERS
 
 if TYPE_CHECKING:
     from types_aiobotocore_s3.client import S3Client

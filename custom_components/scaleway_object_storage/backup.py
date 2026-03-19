@@ -8,8 +8,8 @@ from homeassistant.components.backup import BackupAgent, AgentBackup, suggested_
 from homeassistant.core import HomeAssistant, callback
 from types_aiobotocore_s3.type_defs import CompletedPartTypeDef
 
-from scaleway_object_storage import ScalewayConfigEntry
-from scaleway_object_storage.const import (
+from . import ScalewayConfigEntry
+from .const import (
     DOMAIN,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,

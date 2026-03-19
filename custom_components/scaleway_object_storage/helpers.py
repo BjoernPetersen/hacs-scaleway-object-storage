@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError, ParamValidationError, ConnectionErr
 
 if TYPE_CHECKING:
     from types_aiobotocore_s3.client import S3Client
-from scaleway_object_storage.const import (
+from .const import (
     CONF_REGION,
     CONF_ACCESS_KEY_ID,
     CONF_SECRET_KEY,
