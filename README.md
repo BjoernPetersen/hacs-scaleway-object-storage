@@ -1,5 +1,5 @@
-# s3-compatible-backups
+# Scaleway Object Storage
 
-HACS component that allow backups to S3-compatible storage providers.
+HACS component that allow backups to Scaleway Object Storage.
 
 Use at your own risk. I will not provide support for this integration.

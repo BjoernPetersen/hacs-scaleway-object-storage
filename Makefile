@@ -6,7 +6,7 @@ metadata:
 lint: metadata
 	uv run ruff format
 	uv run ruff check --fix --show-fixes
-	uv run mypy custom_components/ tests/
+	uv run mypy .
 
 .PHONY: test
 test:

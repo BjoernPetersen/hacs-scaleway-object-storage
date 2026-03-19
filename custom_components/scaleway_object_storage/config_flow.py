@@ -1,0 +1,90 @@
+from typing import Any
+
+from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.helpers.selector import (
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+    SelectSelector,
+    SelectSelectorConfig,
+)
+
+from . import helpers
+from .const import (
+    DOMAIN,
+    CONF_ACCESS_KEY,
+    CONF_SECRET_KEY,
+    CONF_BUCKET,
+    CONF_OBJECT_PREFIX,
+    CONF_REGION,
+)
+
+import voluptuous as vol
+from homeassistant.helpers import config_validation as cv
+
+STEP_USER_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ACCESS_KEY): cv.string,
+        vol.Required(CONF_SECRET_KEY): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.PASSWORD)
+        ),
+        vol.Required(CONF_REGION, default="fr-par"): SelectSelector(
+            SelectSelectorConfig(
+                options=[
+                    "fr-par",
+                    "nl-ams",
+                    "pl-waw",
+                    "it-mil",
+                ]
+            )
+        ),
+        vol.Required(CONF_BUCKET): cv.string,
+        vol.Optional(CONF_OBJECT_PREFIX): cv.string,
+    }
+)
+
+
+class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    async def _test_connection(
+        self,
+        *,
+        errors: dict[str, str],
+        config: dict[str, Any],
+    ) -> bool:
+        async with helpers.create_client(config) as client:
+            try:
+                client.head_bucket(Bucket=config[CONF_BUCKET])
+                return True
+            except Exception:
+                # TODO: add more specific exception clauses and real errors
+                errors["base"] = "something"
+
+        return False
+
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            self._async_abort_entries_match(
+                {
+                    CONF_BUCKET: user_input[CONF_BUCKET],
+                    CONF_REGION: user_input[CONF_REGION],
+                }
+            )
+
+            if self._test_connection(errors=errors, config=user_input):
+                return self.async_create_entry(
+                    title=user_input[CONF_BUCKET],
+                    data=user_input,
+                )
+
+        return self.async_show_form(
+            step_id="user",
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA, user_input
+            ),
+            errors=errors,
+        )

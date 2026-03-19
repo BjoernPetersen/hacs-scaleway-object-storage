@@ -1,0 +1,23 @@
+{
+  "domain": "scaleway_object_storage",
+  "name": "Scaleway Object Storage",
+  "version": "0.1.0",
+  "documentation": "https://github.com/BjoernPetersen/hacs-scaleway-object-storage",
+  "issue_tracker": "https://code.bjoernpetersen.net/BjoernPetersen/hacs-scaleway-object-storage/issues",
+  "dependencies": [
+    "backup"
+  ],
+  "codeowners": [
+    "@BjoernPetersen"
+  ],
+  "config_flow": true,
+  "quality_scale": "bronze",
+  "iot_class": "cloud_polling",
+  "integration_type": "service",
+  "loggers": [
+    "aiobotocore"
+  ],
+  "requirements": [
+    "aiobotocore>=3.3.0,<4"
+  ]
+}

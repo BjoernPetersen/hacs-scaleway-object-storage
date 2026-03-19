@@ -18,10 +18,11 @@ def update_hacs(base_dir: Path) -> None:
 
 
 def update_manifest(base_dir: Path) -> None:
-    version = metadata.version("s3-compatible-backups")
-    dependencies = metadata.requires("s3-compatible-backups")
+    package_id = "scaleway-object-storage"
+    version = metadata.version(package_id)
+    dependencies = metadata.requires(package_id)
     manifest_path = (
-        base_dir / "custom_components" / "s3_compatible_backups" / "manifest.json"
+        base_dir / "custom_components" / "scaleway_object_storage" / "manifest.json"
     )
     with manifest_path.open("a+") as file:
         file.seek(0)
