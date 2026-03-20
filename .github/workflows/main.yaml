@@ -19,8 +19,6 @@ jobs:
 
   lint:
     uses: BlindfoldedSurgery/actions-python/.github/workflows/lint.yml@v6
-    # TODO: fix this job (aiobotocore transitive deps don't have wheels)
-    if: false
     with:
       build-tool: uv
       python-version: '3.14'
@@ -28,8 +26,6 @@ jobs:
 
   test:
     uses: BlindfoldedSurgery/actions-python/.github/workflows/test.yml@v6
-    # TODO: fix this job (aiobotocore transitive deps don't have wheels)
-    if: false
     with:
       build-tool: uv
       python-version: '3.14'
@@ -39,7 +35,8 @@ jobs:
     runs-on: ubuntu-slim
     if: "!cancelled() && github.event_name == 'pull_request'"
     needs:
-      - required-meta
+      - lint
+      - test
     steps:
       - run: |
           if [ "true" == "${{ contains(needs.*.result, 'failure') }}" ]
