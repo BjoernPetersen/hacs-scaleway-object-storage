@@ -1774,6 +1774,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiobotocore" },
+    { name = "botocore" },
 ]
 
 [package.dev-dependencies]
@@ -1787,7 +1788,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "aiobotocore", specifier = "==3.3.0" }]
+requires-dist = [
+    { name = "aiobotocore", specifier = "==3.3.0" },
+    { name = "botocore", specifier = "==1.42.70" },
+]
 
 [package.metadata.requires-dev]
 dev = [

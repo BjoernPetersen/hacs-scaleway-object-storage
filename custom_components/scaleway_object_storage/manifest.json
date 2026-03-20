@@ -17,6 +17,7 @@
     "aiobotocore"
   ],
   "requirements": [
-    "aiobotocore==3.2.1"
+    "aiobotocore==3.3.0",
+    "botocore==1.42.70"
   ]
 }

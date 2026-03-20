@@ -9,6 +9,7 @@ classifiers = [
 
 dependencies = [
     "aiobotocore==3.3.0",
+    "botocore==1.42.70",
 ]
 
 [dependency-groups]
