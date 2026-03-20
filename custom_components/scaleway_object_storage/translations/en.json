@@ -29,7 +29,8 @@
   "config": {
     "abort": {
       "already_configured": "Account is already configured",
-      "reauth_successful": "Successfully re-authenticated"
+      "reauth_successful": "Successfully re-authenticated",
+      "reconfigure_successful": "Successfully reconfigured"
     },
     "error": {
       "cannot_connect": "Cannot connect to Scaleway service.",
