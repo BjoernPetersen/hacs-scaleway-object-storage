@@ -54,7 +54,6 @@
         "sections": {
           "credentials": {
             "name": "Credentials",
-            "description": "Provide credentials to access the Scaleway API.",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
@@ -77,7 +76,6 @@
         "sections": {
           "credentials": {
             "name": "Credentials",
-            "description": "Provide credentials to access the Scaleway API.",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
