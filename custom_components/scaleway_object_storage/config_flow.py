@@ -110,7 +110,6 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.debug("Reauth successful")
                 return self.async_update_reload_and_abort(
                     entry,
-                    data=entry.data,
                     data_updates=reauth_data,
                     reload_even_if_entry_is_unchanged=True,
                 )
