@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING, Any
 
-from aiobotocore.session import AioSession
-from botocore.exceptions import ClientError, ConnectionError, ParamValidationError
-
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
@@ -18,6 +15,8 @@ from .const import (
 
 
 def create_client(config: Mapping[str, Any]) -> ClientCreatorContext[S3Client]:
+    from aiobotocore.session import AioSession
+
     session = AioSession()
     region = config[CONF_REGION]
     endpoint_url = f"https://s3.{region}.scw.cloud"
@@ -32,6 +31,7 @@ def create_client(config: Mapping[str, Any]) -> ClientCreatorContext[S3Client]:
 
 
 async def check_connection(client: S3Client, config: Mapping[str, Any]) -> str | None:
+    from botocore.exceptions import ClientError, ConnectionError, ParamValidationError
 
     try:
         await client.head_bucket(Bucket=config[CONF_BUCKET])
