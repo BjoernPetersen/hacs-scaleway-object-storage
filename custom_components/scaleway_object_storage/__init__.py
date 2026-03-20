@@ -14,7 +14,7 @@ type ScalewayConfigEntry = ConfigEntry[S3Client]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ScalewayConfigEntry) -> bool:
-    async with helpers.create_client(entry.data) as client:
+    async with await helpers.create_client(entry.data) as client:
         error = await helpers.check_connection(client, entry.data)
         if error:
             raise ConfigEntryError(
@@ -22,7 +22,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ScalewayConfigEntry) -> 
                 translation_key=error,
             )
 
-    entry.runtime_data = await helpers.create_client(entry.data).__aenter__()
+    entry.runtime_data = await (await helpers.create_client(entry.data)).__aenter__()
 
     # Notify backup listeners
     def notify_backup_listeners() -> None:
