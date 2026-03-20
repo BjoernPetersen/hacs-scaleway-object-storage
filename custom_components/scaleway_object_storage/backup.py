@@ -93,7 +93,7 @@ class ScalewayBackupAgent(BackupAgent):
 
         self._hass = hass
         self._client = entry.runtime_data
-        self._prefix = entry.data[CONF_OBJECT_PREFIX]
+        self._prefix = entry.data.get(CONF_OBJECT_PREFIX)
 
     def _calculate_object_key(self, backup_id: str) -> str:
         prefix = self._prefix
