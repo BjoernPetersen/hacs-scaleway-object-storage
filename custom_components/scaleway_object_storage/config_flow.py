@@ -54,11 +54,10 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str],
         config: dict[str, Any],
     ) -> bool:
-        async with await helpers.create_client(config) as client:
-            error_code = await helpers.check_connection(client, config)
-            if error_code:
-                errors["base"] = error_code
-                return False
+        error_code = await helpers.check_connection(config)
+        if error_code:
+            errors["base"] = error_code
+            return False
 
         return True
 

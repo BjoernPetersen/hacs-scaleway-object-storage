@@ -1,7 +1,7 @@
 {
   "domain": "scaleway_object_storage",
   "name": "Scaleway Object Storage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "documentation": "https://github.com/BjoernPetersen/hacs-scaleway-object-storage",
   "issue_tracker": "https://code.bjoernpetersen.net/BjoernPetersen/hacs-scaleway-object-storage/issues",
   "dependencies": [
@@ -17,7 +17,6 @@
     "aiobotocore"
   ],
   "requirements": [
-    "aiobotocore==3.3.0",
-    "botocore==1.42.70"
+    "aiohttp-s3-client==1.1.2"
   ]
 }

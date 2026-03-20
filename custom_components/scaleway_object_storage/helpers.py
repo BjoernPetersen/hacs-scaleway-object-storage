@@ -1,12 +1,14 @@
-import asyncio
 import logging
+from contextlib import AbstractAsyncContextManager
+from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
+
+from aiohttp import ClientConnectionError, ClientSession, InvalidURL
+from aiohttp_s3_client import S3Client
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from aiobotocore.session import ClientCreatorContext
-    from types_aiobotocore_s3.client import S3Client
 
 from .const import (
     CONF_ACCESS_KEY_ID,
@@ -18,46 +20,51 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-async def create_client(config: Mapping[str, Any]) -> ClientCreatorContext[S3Client]:
-    try:
-        from aiobotocore.session import AioSession
-    except ImportError:
-        _LOGGER.warning("aiobotocore import failed (attempt #1)")
-        await asyncio.sleep(10)
+class ClosableS3Client(S3Client, AbstractAsyncContextManager[S3Client]):
+    async def __aexit__(self, exc_type, exc_value, traceback, /):
+        await self.close()
 
-    from aiobotocore.session import AioSession
+    async def close(self) -> None:
+        await self._session.close()
 
-    session = AioSession()
+
+def create_client(
+    config: Mapping[str, Any], bucket_scoped: bool = True
+) -> ClosableS3Client:
     region = config[CONF_REGION]
-    endpoint_url = f"https://s3.{region}.scw.cloud"
-
-    def _create_client() -> ClientCreatorContext[S3Client]:
-        return session.create_client(
-            service_name="s3",
-            use_ssl=True,
-            endpoint_url=endpoint_url,
-            region_name=region,
-            aws_access_key_id=config[CONF_ACCESS_KEY_ID],
-            aws_secret_access_key=config[CONF_SECRET_KEY],
-        )
-
-    # Client creation is doing blocking calls, so we run it in a thread pool...
-    loop = asyncio.get_running_loop()
-    return await loop.run_in_executor(None, _create_client)
-
-
-async def check_connection(client: S3Client, config: Mapping[str, Any]) -> str | None:
-    from botocore.exceptions import ClientError, ConnectionError, ParamValidationError
-
-    try:
-        await client.head_bucket(Bucket=config[CONF_BUCKET])
-    except ClientError:
-        return "invalid_auth"
-    except ParamValidationError as e:
-        if "Invalid bucket name" in str(e):
-            return "invalid_bucket_name"
-        return "validation_failed"
-    except ConnectionError:
-        return "cannot_connect"
+    if bucket_scoped:
+        endpoint_url = f"https://{config[CONF_BUCKET]}.s3.{region}.scw.cloud"
     else:
-        return None
+        endpoint_url = f"https://s3.{region}.scw.cloud"
+
+    return ClosableS3Client(
+        session=ClientSession(),
+        url=endpoint_url,
+        access_key_id=config[CONF_ACCESS_KEY_ID],
+        secret_access_key=config[CONF_SECRET_KEY],
+        region=region,
+    )
+
+
+async def check_connection(config: Mapping[str, Any]) -> str | None:
+    async with create_client(config, bucket_scoped=False) as client:
+        try:
+            response = await client.head(object_name=config[CONF_BUCKET])
+        except ClientConnectionError:
+            return "cannot_connect"
+        except InvalidURL as e:
+            _LOGGER.warning("Invalid URL: %s", e.url, exc_info=e)
+            return "invalid_bucket_name"
+
+        if response.status == HTTPStatus.OK:
+            return None
+
+        _LOGGER.error("Received status code %d for bucket access", response.status)
+
+        if response.status in [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN]:
+            return "invalid_auth"
+
+        if 500 <= response.status < 600:
+            return "server_error"
+
+        return "unknown"

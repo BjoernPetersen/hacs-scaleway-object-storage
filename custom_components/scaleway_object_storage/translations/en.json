@@ -9,8 +9,11 @@
     "invalid_bucket_name": {
       "message": "Invalid bucket name."
     },
-    "validation_failed": {
-      "message": "Server-side validation failed."
+    "server_error": {
+      "message": "Received internal server error from Scaleway."
+    },
+    "unknown": {
+      "message": "Received unexpected error from Scaleway."
     }
   },
   "selector": {
@@ -31,7 +34,8 @@
       "cannot_connect": "Cannot connect to Scaleway service.",
       "invalid_auth": "The provided access key and secret key are invalid.",
       "invalid_bucket_name": "Invalid bucket name.",
-      "validation_failed": "Server-side validation failed."
+    "server_error":  "Received internal server error from Scaleway.",
+    "unknown": "Received unexpected error from Scaleway."
     },
     "step": {
       "user": {
