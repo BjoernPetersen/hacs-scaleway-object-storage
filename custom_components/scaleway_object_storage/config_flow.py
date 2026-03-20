@@ -126,7 +126,7 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="reauth",
             data_schema=self.add_suggested_values_to_schema(
                 STEP_REAUTH_DATA_SCHEMA,
-                reauth_data or entry.data[CONF_SECTION_CREDENTIALS],
+                reauth_data or entry.data.get(CONF_SECTION_CREDENTIALS) or entry.data,
             ),
             errors=errors,
             description_placeholders={
