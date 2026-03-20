@@ -104,7 +104,6 @@ class ScalewayBackupAgent(BackupAgent):
     @staticmethod
     async def _yield_chunks(response: StreamReader) -> AsyncGenerator[bytes]:
         async for chunk in response.iter_any():
-            _LOGGER.debug("Got chunk of size %d", len(chunk))
             yield chunk
 
     async def async_download_backup(
@@ -157,7 +156,9 @@ class ScalewayBackupAgent(BackupAgent):
         )
 
     @staticmethod
-    async def _read_parts(stream: AsyncIterator[bytes]) -> AsyncGenerator[Part]:
+    async def _read_fixed_sized_parts(
+        stream: AsyncIterator[bytes],
+    ) -> AsyncGenerator[Part]:
         buffer = bytearray()
         offset = 0
 
@@ -200,7 +201,7 @@ class ScalewayBackupAgent(BackupAgent):
                     await upload_coro
 
             async with asyncio.TaskGroup() as tg:
-                async for part in self._read_parts(stream):
+                async for part in self._read_fixed_sized_parts(stream):
                     upload = uploader.put_part(
                         data=part.data,
                         content_sha256=part.digest,
@@ -221,13 +222,11 @@ class ScalewayBackupAgent(BackupAgent):
         return AgentBackup.from_dict(json.loads(meta))
 
     async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
-        client = self._client
-
         backups = []
         limiter = asyncio.Semaphore(MAX_PARALLEL_HEAD_REQUESTS)
 
         async with asyncio.TaskGroup() as tg:
-            async for items, _ in client.list_objects_v2(prefix=self._prefix):
+            async for items, _ in self._client.list_objects_v2(prefix=self._prefix):
                 for meta in items:
                     backups.append(
                         tg.create_task(
