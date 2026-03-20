@@ -21,3 +21,5 @@ MAX_PARALLEL_REQUESTS: Final[int] = 8
 
 MULTIPART_MIN_SIZE: Final[int] = 50 * 2**20
 MULTIPART_PART_SIZE: Final[int] = 32 * 2**20
+
+METADATA_HEADER = "backup-info"

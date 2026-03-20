@@ -13,6 +13,7 @@ from .const import (
     DATA_BACKUP_AGENT_LISTENERS,
     DOMAIN,
     MAX_PARALLEL_REQUESTS,
+    METADATA_HEADER,
     MULTIPART_MIN_SIZE,
     MULTIPART_PART_SIZE,
 )
@@ -119,7 +120,7 @@ class ScalewayBackupAgent(BackupAgent):
             Bucket=self._bucket,
             Key=key,
             Metadata={
-                "backup_info": json.dumps(backup.as_dict()),
+                METADATA_HEADER: json.dumps(backup.as_dict()),
             },
             ContentDisposition=f'attachment; filename="{suggested_filename(backup)}"',
             Body=bytes(buffer),
@@ -161,7 +162,7 @@ class ScalewayBackupAgent(BackupAgent):
             Bucket=self._bucket,
             Key=key,
             Metadata={
-                "backup_info": json.dumps(backup.as_dict()),
+                METADATA_HEADER: json.dumps(backup.as_dict()),
             },
             ContentDisposition=f'attachment; filename="{suggested_filename(backup)}"',
         )
@@ -213,7 +214,7 @@ class ScalewayBackupAgent(BackupAgent):
                 Bucket=self._bucket, Key=object_key
             )
             meta = response["Metadata"]
-            return AgentBackup.from_dict(json.loads(meta["backup_info"]))
+            return AgentBackup.from_dict(json.loads(meta[METADATA_HEADER]))
 
     async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
         client = self._client
