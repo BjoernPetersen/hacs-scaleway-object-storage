@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from aiohttp import ClientConnectionError, ClientSession, InvalidURL
 from aiohttp_s3_client import S3Client
-from homeassistant.exceptions import ConfigEntryAuthFailed
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -34,10 +33,13 @@ def create_client(
         endpoint_url = f"https://s3.{region}.scw.cloud"
 
     if CONF_SECTION_CREDENTIALS not in config:
-        # TODO: remove
-        raise ConfigEntryAuthFailed()
-
-    credentials = config[CONF_SECTION_CREDENTIALS]
+        # TODO: remove this fallback
+        credentials = {
+            CONF_ACCESS_KEY_ID: config[CONF_ACCESS_KEY_ID],
+            CONF_SECRET_KEY: config[CONF_SECRET_KEY],
+        }
+    else:
+        credentials = config[CONF_SECTION_CREDENTIALS]
 
     return S3Client(
         session=session,
