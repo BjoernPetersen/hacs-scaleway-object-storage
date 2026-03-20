@@ -28,7 +28,8 @@
   },
   "config": {
     "abort": {
-      "already_configured": "Account is already configured"
+      "already_configured": "Account is already configured",
+      "reauth_successful": "Successfully re-authenticated"
     },
     "error": {
       "cannot_connect": "Cannot connect to Scaleway service.",
@@ -41,27 +42,28 @@
       "user": {
         "title": "Add Scaleway Object Storage bucket",
         "data": {
-          "access_key_id": "Access Key ID",
-          "secret_key": "Secret Key",
           "region": "Region",
           "bucket": "Bucket name",
           "object_prefix": "Object prefix"
         },
         "data_description": {
-          "bucket": "Bucket must already exist and be writable using the provided credentials.",
+          "bucket": "Bucket must already exist and be writable using the provided credentials. [See Scaleway docs.](https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/)",
           "object_prefix": "A prefix that will be added to every object key."
         },
-        "description_placeholders": [
-          "https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/",
-          "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/"
-        ]
+        "sections": {
+          "credentials":{
+            "name":  "Credentials",
+            "description": "Provide credentials to access the Scaleway API. [See Scaleway docs.](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/)",
+            "data": {
+          "access_key_id": "Access Key ID",
+          "secret_key": "Secret Key"
+            }
+          }
+        }
       },
       "reauth": {
         "title": "Re-authenticate Scaleway Object Storage bucket",
-        "description": "Your Scaleway credentials are no longer valid. Please enter new, valid credentials.",
-        "description_placeholders": [
-          "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/"
-        ],
+        "description": "Your [Scaleway credentials](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/) for the `{bucket_name}` bucket are no longer valid. Please enter new, valid credentials.",
         "data": {
           "access_key_id": "Access Key ID",
           "secret_key": "Secret Key"

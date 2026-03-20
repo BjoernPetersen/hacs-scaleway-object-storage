@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.data_entry_flow import section
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
@@ -20,6 +21,7 @@ from .const import (
     CONF_OBJECT_PREFIX,
     CONF_REGION,
     CONF_SECRET_KEY,
+    CONF_SECTION_CREDENTIALS,
     DOMAIN,
 )
 
@@ -30,12 +32,18 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
+STEP_REAUTH_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_ACCESS_KEY_ID): cv.string,
         vol.Required(CONF_SECRET_KEY): TextSelector(
             TextSelectorConfig(type=TextSelectorType.PASSWORD)
         ),
+    }
+)
+
+STEP_USER_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_SECTION_CREDENTIALS): section(STEP_REAUTH_DATA_SCHEMA),
         vol.Required(CONF_REGION, default="fr-par"): SelectSelector(
             SelectSelectorConfig(
                 translation_key="regions",
@@ -52,17 +60,10 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
-STEP_REAUTH_DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_ACCESS_KEY_ID): cv.string,
-        vol.Required(CONF_SECRET_KEY): TextSelector(
-            TextSelectorConfig(type=TextSelectorType.PASSWORD)
-        ),
-    }
-)
-
 
 class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    VERSION = 1
+
     async def _test_connection(
         self,
         *,
@@ -112,7 +113,7 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         entry = self._get_reauth_entry()
 
         if reauth_data is not None:
-            config = entry.data | reauth_data
+            config = entry.data | {CONF_SECTION_CREDENTIALS: reauth_data}
             if await self._test_connection(errors=errors, config=config):
                 _LOGGER.debug("Reauth successful")
                 return self.async_update_reload_and_abort(
@@ -125,7 +126,10 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="reauth",
             data_schema=self.add_suggested_values_to_schema(
                 STEP_REAUTH_DATA_SCHEMA,
-                reauth_data or entry.data,
+                reauth_data or entry.data[CONF_SECTION_CREDENTIALS],
             ),
             errors=errors,
+            description_placeholders={
+                "bucket_name": entry.data[CONF_BUCKET],
+            },
         )

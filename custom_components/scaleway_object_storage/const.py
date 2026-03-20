@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 DOMAIN: Final = "scaleway_object_storage"
 
+CONF_SECTION_CREDENTIALS: Final = "credentials"
 CONF_ACCESS_KEY_ID: Final = "access_key_id"
 CONF_SECRET_KEY: Final = "secret_key"
 CONF_BUCKET: Final = "bucket"
