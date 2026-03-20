@@ -78,6 +78,7 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     CONF_BUCKET: user_input[CONF_BUCKET],
                     CONF_REGION: user_input[CONF_REGION],
+                    CONF_OBJECT_PREFIX: user_input[CONF_OBJECT_PREFIX],
                 }
             )
 
