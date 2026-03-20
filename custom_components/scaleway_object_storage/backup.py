@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -117,8 +118,10 @@ class ScalewayBackupAgent(BackupAgent):
         await self._client.put_object(
             Bucket=self._bucket,
             Key=key,
-            Metadata=backup.as_dict(),
-            ContentDisposition=suggested_filename(backup),
+            Metadata={
+                "backup_info": json.dumps(backup.as_dict()),
+            },
+            ContentDisposition=f'attachment; filename="{suggested_filename(backup)}"',
             Body=bytes(buffer),
         )
 
@@ -157,8 +160,10 @@ class ScalewayBackupAgent(BackupAgent):
         multipart_upload = await client.create_multipart_upload(
             Bucket=self._bucket,
             Key=key,
-            Metadata=backup.as_dict(),
-            ContentDisposition=suggested_filename(backup),
+            Metadata={
+                "backup_info": json.dumps(backup.as_dict()),
+            },
+            ContentDisposition=f'attachment; filename="{suggested_filename(backup)}"',
         )
 
         upload_id = multipart_upload["UploadId"]
@@ -208,7 +213,7 @@ class ScalewayBackupAgent(BackupAgent):
                 Bucket=self._bucket, Key=object_key
             )
             meta = response["Metadata"]
-            return AgentBackup.from_dict(meta)
+            return AgentBackup.from_dict(json.loads(meta["backup_info"]))
 
     async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
         client = self._client
