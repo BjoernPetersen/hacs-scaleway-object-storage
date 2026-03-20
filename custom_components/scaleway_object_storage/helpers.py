@@ -49,16 +49,17 @@ async def check_connection(
     except ClientConnectionError:
         return "cannot_connect"
     except InvalidURL as e:
-        _LOGGER.warning("Invalid URL: %s", e.url, exc_info=e)
+        _LOGGER.info("Invalid URL: %s", e.url, exc_info=e)
         return "invalid_bucket_name"
 
     if response.status == HTTPStatus.OK:
         return None
 
-    _LOGGER.error("Received status code %d for bucket access", response.status)
-
     if response.status in [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN]:
+        _LOGGER.info("Received status code %d, indicating auth issue", response.status)
         return "invalid_auth"
+
+    _LOGGER.error("Received status code %d during connection check", response.status)
 
     if 500 <= response.status < 600:
         return "server_error"

@@ -30,6 +30,8 @@ if TYPE_CHECKING:
 
     from . import ScalewayConfigEntry
 
+    type OpenStream = Callable[[], Awaitable[AsyncIterator[bytes]]]
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -95,11 +97,11 @@ class ScalewayBackupAgent(BackupAgent):
 
     def _calculate_object_key(self, backup_id: str) -> str:
         prefix = self._prefix
-        filename = f"home-assistant-backup-{backup_id}.tar"
+        object_name = f"home-assistant-backup-{backup_id}.tar"
         if prefix:
-            return f"{prefix}{filename}"
+            return f"{prefix}{object_name}"
 
-        return filename
+        return object_name
 
     @staticmethod
     async def _yield_chunks(response: StreamReader) -> AsyncGenerator[bytes]:
@@ -121,7 +123,7 @@ class ScalewayBackupAgent(BackupAgent):
     async def async_upload_backup(
         self,
         *,
-        open_stream: Callable[[], Awaitable[AsyncIterator[bytes]]],
+        open_stream: OpenStream,
         backup: AgentBackup,
         **kwargs: Any,
     ) -> None:
@@ -141,9 +143,10 @@ class ScalewayBackupAgent(BackupAgent):
     async def _upload_object(
         self,
         *,
-        open_stream: Callable[[], Awaitable[AsyncIterator[bytes]]],
+        open_stream: OpenStream,
         backup: AgentBackup,
     ) -> None:
+        _LOGGER.debug("Uploading backup as single part")
         key = self._calculate_object_key(backup.backup_id)
         stream = await open_stream()
         await self._client.put(
@@ -183,9 +186,10 @@ class ScalewayBackupAgent(BackupAgent):
     async def _upload_multipart_object(
         self,
         *,
-        open_stream: Callable[[], Awaitable[AsyncIterator[bytes]]],
+        open_stream: OpenStream,
         backup: AgentBackup,
     ) -> None:
+        _LOGGER.debug("Uploading backup as multiple parts")
         client = self._client
         key = self._calculate_object_key(backup.backup_id)
 
@@ -198,6 +202,7 @@ class ScalewayBackupAgent(BackupAgent):
 
             async def _perform_upload(upload_coro: Awaitable[None]) -> None:
                 async with limiter:
+                    _LOGGER.debug("Starting upload of a new part")
                     await upload_coro
 
             async with asyncio.TaskGroup() as tg:
@@ -217,6 +222,7 @@ class ScalewayBackupAgent(BackupAgent):
     ) -> AgentBackup:
         limiter = limiter or asyncio.Semaphore()
         async with limiter:
+            _LOGGER.debug("Reading metadata for object %s", object_key)
             response = await self._client.head(object_name=object_key)
         meta = response.headers[HEADER_METADATA]
         return AgentBackup.from_dict(json.loads(meta))
