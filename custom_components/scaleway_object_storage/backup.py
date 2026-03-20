@@ -84,14 +84,18 @@ class ScalewayBackupAgent(BackupAgent):
 
         return filename
 
-    async def async_download_backup(  # type: ignore[override,misc]
+    @staticmethod
+    async def _yield_chunks(chunks: AsyncIterator[bytes]) -> AsyncGenerator[bytes]:
+        async for chunk in chunks:
+            _LOGGER.debug("Got chunk of size %d", len(chunk))
+            yield chunk
+
+    async def async_download_backup(
         self, backup_id: str, **kwargs: Any
     ) -> AsyncIterator[bytes]:
         key = self._calculate_object_key(backup_id)
         response = await self._client.get_object(Bucket=self._bucket, Key=key)
-        async for chunk in response["Body"]:
-            _LOGGER.debug("Got chunk of size %d", len(chunk))
-            yield chunk
+        return self._yield_chunks(response["Body"])
 
     # TODO: report progress in 2026.04
     async def async_upload_backup(
