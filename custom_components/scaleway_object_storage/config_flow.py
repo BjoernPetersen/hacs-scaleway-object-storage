@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     SelectSelector,
     SelectSelectorConfig,
@@ -54,7 +55,8 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str],
         config: dict[str, Any],
     ) -> bool:
-        error_code = await helpers.check_connection(config)
+        session = async_get_clientsession(self.hass)
+        error_code = await helpers.check_connection(session, config)
         if error_code:
             errors["base"] = error_code
             return False

@@ -1,5 +1,4 @@
 import logging
-from contextlib import AbstractAsyncContextManager
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
@@ -20,25 +19,19 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-class ClosableS3Client(S3Client, AbstractAsyncContextManager[S3Client]):
-    async def __aexit__(self, exc_type, exc_value, traceback, /):
-        await self.close()
-
-    async def close(self) -> None:
-        await self._session.close()
-
-
 def create_client(
-    config: Mapping[str, Any], bucket_scoped: bool = True
-) -> ClosableS3Client:
+    session: ClientSession,
+    config: Mapping[str, Any],
+    bucket_scoped: bool = True,
+) -> S3Client:
     region = config[CONF_REGION]
     if bucket_scoped:
         endpoint_url = f"https://{config[CONF_BUCKET]}.s3.{region}.scw.cloud"
     else:
         endpoint_url = f"https://s3.{region}.scw.cloud"
 
-    return ClosableS3Client(
-        session=ClientSession(),
+    return S3Client(
+        session=session,
         url=endpoint_url,
         access_key_id=config[CONF_ACCESS_KEY_ID],
         secret_access_key=config[CONF_SECRET_KEY],
@@ -46,25 +39,28 @@ def create_client(
     )
 
 
-async def check_connection(config: Mapping[str, Any]) -> str | None:
-    async with create_client(config, bucket_scoped=False) as client:
-        try:
-            response = await client.head(object_name=config[CONF_BUCKET])
-        except ClientConnectionError:
-            return "cannot_connect"
-        except InvalidURL as e:
-            _LOGGER.warning("Invalid URL: %s", e.url, exc_info=e)
-            return "invalid_bucket_name"
+async def check_connection(
+    session: ClientSession,
+    config: Mapping[str, Any],
+) -> str | None:
+    client = create_client(session, config, bucket_scoped=False)
+    try:
+        response = await client.head(object_name=config[CONF_BUCKET])
+    except ClientConnectionError:
+        return "cannot_connect"
+    except InvalidURL as e:
+        _LOGGER.warning("Invalid URL: %s", e.url, exc_info=e)
+        return "invalid_bucket_name"
 
-        if response.status == HTTPStatus.OK:
-            return None
+    if response.status == HTTPStatus.OK:
+        return None
 
-        _LOGGER.error("Received status code %d for bucket access", response.status)
+    _LOGGER.error("Received status code %d for bucket access", response.status)
 
-        if response.status in [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN]:
-            return "invalid_auth"
+    if response.status in [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN]:
+        return "invalid_auth"
 
-        if 500 <= response.status < 600:
-            return "server_error"
+    if 500 <= response.status < 600:
+        return "server_error"
 
-        return "unknown"
+    return "unknown"
