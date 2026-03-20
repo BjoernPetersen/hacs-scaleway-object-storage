@@ -52,6 +52,15 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
+STEP_REAUTH_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_ACCESS_KEY_ID): cv.string,
+        vol.Required(CONF_SECRET_KEY): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.PASSWORD)
+        ),
+    }
+)
+
 
 class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def _test_connection(
@@ -99,10 +108,8 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_reauth(
         self, reauth_data: dict[str, Any] | None
     ) -> ConfigFlowResult:
-        _LOGGER.debug("reauth_data: %s", reauth_data)
         errors: dict[str, str] = {}
         entry = self._get_reauth_entry()
-        _LOGGER.debug("reauth_entry data: %s", entry.data)
 
         if reauth_data is not None:
             config = entry.data | reauth_data
@@ -110,23 +117,15 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.debug("Reauth successful")
                 return self.async_update_reload_and_abort(
                     entry,
-                    data_updates=reauth_data,
+                    data=config,
                     reload_even_if_entry_is_unchanged=True,
                 )
 
-        # TODO: flow strings
         return self.async_show_form(
             step_id="reauth",
             data_schema=self.add_suggested_values_to_schema(
-                vol.Schema(
-                    {
-                        vol.Required(CONF_ACCESS_KEY_ID): cv.string,
-                        vol.Required(CONF_SECRET_KEY): TextSelector(
-                            TextSelectorConfig(type=TextSelectorType.PASSWORD)
-                        ),
-                    }
-                ),
-                reauth_data,
+                STEP_REAUTH_DATA_SCHEMA,
+                reauth_data or entry.data,
             ),
             errors=errors,
         )

@@ -34,11 +34,12 @@
       "cannot_connect": "Cannot connect to Scaleway service.",
       "invalid_auth": "The provided access key and secret key are invalid.",
       "invalid_bucket_name": "Invalid bucket name.",
-    "server_error":  "Received internal server error from Scaleway.",
-    "unknown": "Received unexpected error from Scaleway."
+      "server_error": "Received internal server error from Scaleway.",
+      "unknown": "Received unexpected error from Scaleway."
     },
     "step": {
       "user": {
+        "title": "Add Scaleway Object Storage bucket",
         "data": {
           "access_key_id": "Access Key ID",
           "secret_key": "Secret Key",
@@ -50,7 +51,21 @@
           "bucket": "Bucket must already exist and be writable using the provided credentials.",
           "object_prefix": "A prefix that will be added to every object key."
         },
-        "title": "Add Scaleway Object Storage bucket"
+        "description_placeholders": [
+          "https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/",
+          "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/"
+        ]
+      },
+      "reauth": {
+        "title": "Re-authenticate Scaleway Object Storage bucket",
+        "description": "Your Scaleway credentials are no longer valid. Please enter new, valid credentials.",
+        "description_placeholders": [
+          "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/"
+        ],
+        "data": {
+          "access_key_id": "Access Key ID",
+          "secret_key": "Secret Key"
+        }
       }
     }
   }
