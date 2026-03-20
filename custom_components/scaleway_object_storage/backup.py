@@ -97,23 +97,24 @@ class ScalewayBackupAgent(BackupAgent):
 
     def _calculate_object_key(self, backup_id: str) -> str:
         prefix = self._prefix
-        object_name = f"home-assistant-backup-{backup_id}.tar"
+        object_key = f"home-assistant-backup-{backup_id}.tar"
         if prefix:
-            return f"{prefix}{object_name}"
+            return f"{prefix}{object_key}"
 
-        return object_name
+        return object_key
 
     @staticmethod
     async def _yield_chunks(response: StreamReader) -> AsyncGenerator[bytes]:
+        # TODO: handle errors
         async for chunk in response.iter_any():
             yield chunk
 
     async def async_download_backup(
         self, backup_id: str, **kwargs: Any
     ) -> AsyncIterator[bytes]:
-        key = self._calculate_object_key(backup_id)
+        object_key = self._calculate_object_key(backup_id)
         response = await self._client.get(
-            object_name=key,
+            object_name=object_key,
             raise_for_status=True,
         )
         # TODO: check response code
@@ -147,10 +148,10 @@ class ScalewayBackupAgent(BackupAgent):
         backup: AgentBackup,
     ) -> None:
         _LOGGER.debug("Uploading backup as single part")
-        key = self._calculate_object_key(backup.backup_id)
+        object_key = self._calculate_object_key(backup.backup_id)
         stream = await open_stream()
         await self._client.put(
-            object_name=key,
+            object_name=object_key,
             data=stream,
             data_length=backup.size,
             headers=self._create_headers(backup),
@@ -191,10 +192,10 @@ class ScalewayBackupAgent(BackupAgent):
     ) -> None:
         _LOGGER.debug("Uploading backup as multiple parts")
         client = self._client
-        key = self._calculate_object_key(backup.backup_id)
+        object_key = self._calculate_object_key(backup.backup_id)
 
         async with MultipartUploader(
-            client, object_name=key, headers=self._create_headers(backup)
+            client, object_name=object_key, headers=self._create_headers(backup)
         ) as uploader:
             stream = await open_stream()
 
@@ -214,8 +215,8 @@ class ScalewayBackupAgent(BackupAgent):
                     tg.create_task(_perform_upload(upload))
 
     async def async_delete_backup(self, backup_id: str, **kwargs: Any) -> None:
-        key = self._calculate_object_key(backup_id)
-        await self._client.delete(object_name=key)
+        object_key = self._calculate_object_key(backup_id)
+        await self._client.delete(object_name=object_key)
 
     async def _read_metadata(
         self, *, object_key: str, limiter: asyncio.Semaphore | None
@@ -243,5 +244,5 @@ class ScalewayBackupAgent(BackupAgent):
         return [task.result() for task in backups]
 
     async def async_get_backup(self, backup_id: str, **kwargs: Any) -> AgentBackup:
-        key = self._calculate_object_key(backup_id)
-        return await self._read_metadata(object_key=key, limiter=None)
+        object_key = self._calculate_object_key(backup_id)
+        return await self._read_metadata(object_key=object_key, limiter=None)
