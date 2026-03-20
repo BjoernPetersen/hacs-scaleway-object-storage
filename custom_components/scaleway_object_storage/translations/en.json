@@ -51,12 +51,34 @@
           "object_prefix": "A prefix that will be added to every object key."
         },
         "sections": {
-          "credentials":{
-            "name":  "Credentials",
+          "credentials": {
+            "name": "Credentials",
             "description": "Provide credentials to access the Scaleway API. [See Scaleway docs.](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/)",
             "data": {
-          "access_key_id": "Access Key ID",
-          "secret_key": "Secret Key"
+              "access_key_id": "Access Key ID",
+              "secret_key": "Secret Key"
+            }
+          }
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Scaleway Object Storage backup",
+        "data": {
+          "region": "Region",
+          "bucket": "Bucket name",
+          "object_prefix": "Object prefix"
+        },
+        "data_description": {
+          "bucket": "Bucket must already exist and be writable using the provided credentials. [See Scaleway docs.](https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/)",
+          "object_prefix": "A prefix that will be added to every object key."
+        },
+        "sections": {
+          "credentials": {
+            "name": "Credentials",
+            "description": "Provide credentials to access the Scaleway API. [See Scaleway docs.](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/)",
+            "data": {
+              "access_key_id": "Access Key ID",
+              "secret_key": "Secret Key"
             }
           }
         }

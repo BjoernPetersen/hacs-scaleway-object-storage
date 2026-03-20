@@ -132,3 +132,25 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 "bucket_name": entry.data[CONF_BUCKET],
             },
         )
+
+    async def async_step_reconfigure(
+        self, user_data: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+        entry = self._get_reconfigure_entry()
+
+        if user_data is not None:
+            if await self._test_connection(errors=errors, config=user_data):
+                return self.async_update_reload_and_abort(
+                    entry,
+                    data=user_data,
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA,
+                user_data or entry.data,
+            ),
+            errors=errors,
+        )
