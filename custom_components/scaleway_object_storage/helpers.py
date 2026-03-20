@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from aiohttp import ClientConnectionError, ClientSession, InvalidURL
 from aiohttp_s3_client import S3Client
+from homeassistant.const import CONF_REGION
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -12,7 +13,6 @@ if TYPE_CHECKING:
 from .const import (
     CONF_ACCESS_KEY_ID,
     CONF_BUCKET,
-    CONF_REGION,
     CONF_SECRET_KEY,
     CONF_SECTION_CREDENTIALS,
     ErrorCode,

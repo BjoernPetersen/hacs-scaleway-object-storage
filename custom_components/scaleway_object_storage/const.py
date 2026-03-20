@@ -12,7 +12,6 @@ CONF_SECTION_CREDENTIALS: Final = "credentials"
 CONF_ACCESS_KEY_ID: Final = "access_key_id"
 CONF_SECRET_KEY: Final = "secret_key"
 CONF_BUCKET: Final = "bucket"
-CONF_REGION: Final = "region"
 CONF_OBJECT_PREFIX: Final = "object_prefix"
 
 DOCS_PLACEHOLDERS: Final = {

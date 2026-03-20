@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.const import CONF_REGION
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -19,7 +20,6 @@ from .const import (
     CONF_ACCESS_KEY_ID,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,
-    CONF_REGION,
     CONF_SECRET_KEY,
     CONF_SECTION_CREDENTIALS,
     DOCS_PLACEHOLDERS,
