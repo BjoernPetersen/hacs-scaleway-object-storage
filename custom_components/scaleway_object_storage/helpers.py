@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -14,8 +15,16 @@ from .const import (
     CONF_SECRET_KEY,
 )
 
+_LOGGER = logging.getLogger(__name__)
+
 
 async def create_client(config: Mapping[str, Any]) -> ClientCreatorContext[S3Client]:
+    try:
+        from aiobotocore.session import AioSession
+    except ImportError:
+        _LOGGER.warning("aiobotocore import failed (attempt #1)")
+        await asyncio.sleep(10)
+
     from aiobotocore.session import AioSession
 
     session = AioSession()
