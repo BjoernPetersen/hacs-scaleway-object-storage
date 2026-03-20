@@ -90,7 +90,7 @@ class ScalewayBackupAgent(BackupAgent):
         key = self._calculate_object_key(backup_id)
         response = await self._client.get_object(Bucket=self._bucket, Key=key)
         async for chunk in response["Body"]:
-            _LOGGER.warning("Got chunk of size %d", len(chunk))
+            _LOGGER.debug("Got chunk of size %d", len(chunk))
             yield chunk
 
     # TODO: report progress in 2026.04
