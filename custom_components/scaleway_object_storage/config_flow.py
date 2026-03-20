@@ -115,7 +115,6 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if reauth_data is not None:
             config = entry.data | {CONF_SECTION_CREDENTIALS: reauth_data}
             if await self._test_connection(errors=errors, config=config):
-                _LOGGER.debug("Reauth successful")
                 return self.async_update_reload_and_abort(
                     entry,
                     data=config,
