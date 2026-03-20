@@ -22,6 +22,7 @@ from .const import (
     CONF_REGION,
     CONF_SECRET_KEY,
     CONF_SECTION_CREDENTIALS,
+    DOCS_PLACEHOLDERS,
     DOMAIN,
 )
 
@@ -103,6 +104,7 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=self.add_suggested_values_to_schema(
                 STEP_USER_DATA_SCHEMA, user_input
             ),
+            description_placeholders=DOCS_PLACEHOLDERS,
             errors=errors,
         )
 
@@ -127,10 +129,11 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 STEP_REAUTH_DATA_SCHEMA,
                 reauth_data or entry.data.get(CONF_SECTION_CREDENTIALS) or entry.data,
             ),
-            errors=errors,
             description_placeholders={
                 "bucket_name": entry.data[CONF_BUCKET],
+                **DOCS_PLACEHOLDERS,
             },
+            errors=errors,
         )
 
     async def async_step_reconfigure(
@@ -152,5 +155,6 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 STEP_USER_DATA_SCHEMA,
                 user_data or entry.data,
             ),
+            description_placeholders=DOCS_PLACEHOLDERS,
             errors=errors,
         )

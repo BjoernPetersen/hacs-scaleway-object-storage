@@ -15,6 +15,11 @@ CONF_BUCKET: Final = "bucket"
 CONF_REGION: Final = "region"
 CONF_OBJECT_PREFIX: Final = "object_prefix"
 
+DOCS_PLACEHOLDERS: Final = {
+    "api_key_docs": "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/",
+    "bucket_docs": "https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/",
+}
+
 DATA_BACKUP_AGENT_LISTENERS: HassKey[list[Callable[[], None]]] = HassKey(
     f"{DOMAIN}.backup_agent_listeners"
 )

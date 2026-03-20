@@ -41,19 +41,20 @@
     "step": {
       "user": {
         "title": "Add Scaleway Object Storage bucket",
+        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
         "data": {
           "region": "Region",
           "bucket": "Bucket name",
           "object_prefix": "Object prefix"
         },
         "data_description": {
-          "bucket": "Bucket must already exist and be writable using the provided credentials. [See Scaleway docs.](https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/)",
+          "bucket": "Bucket must already exist and be writable using the provided credentials.",
           "object_prefix": "A prefix that will be added to every object key."
         },
         "sections": {
           "credentials": {
             "name": "Credentials",
-            "description": "Provide credentials to access the Scaleway API. [See Scaleway docs.](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/)",
+            "description": "Provide credentials to access the Scaleway API.",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
@@ -63,19 +64,20 @@
       },
       "reconfigure": {
         "title": "Reconfigure Scaleway Object Storage backup",
+        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
         "data": {
           "region": "Region",
           "bucket": "Bucket name",
           "object_prefix": "Object prefix"
         },
         "data_description": {
-          "bucket": "Bucket must already exist and be writable using the provided credentials. [See Scaleway docs.](https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/)",
+          "bucket": "Bucket must already exist and be writable using the provided credentials.",
           "object_prefix": "A prefix that will be added to every object key."
         },
         "sections": {
           "credentials": {
             "name": "Credentials",
-            "description": "Provide credentials to access the Scaleway API. [See Scaleway docs.](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/)",
+            "description": "Provide credentials to access the Scaleway API.",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
@@ -85,7 +87,7 @@
       },
       "reauth": {
         "title": "Re-authenticate Scaleway Object Storage bucket",
-        "description": "Your [Scaleway credentials](https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/) for the `{bucket_name}` bucket are no longer valid. Please enter new, valid credentials.",
+        "description": "Your [Scaleway credentials]({api_key_docs}) for the `{bucket_name}` bucket are no longer valid. Please enter new, valid credentials.",
         "data": {
           "access_key_id": "Access Key ID",
           "secret_key": "Secret Key"
