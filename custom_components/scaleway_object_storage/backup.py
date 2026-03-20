@@ -150,6 +150,7 @@ class ScalewayBackupAgent(BackupAgent):
         await self._client.put(
             object_name=key,
             data=stream,
+            data_length=backup.size,
             headers=self._create_headers(backup),
             # TODO: proper error handling
             raise_for_status=True,
