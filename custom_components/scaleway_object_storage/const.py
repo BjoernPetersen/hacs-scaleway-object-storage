@@ -1,3 +1,4 @@
+from enum import StrEnum
 from typing import TYPE_CHECKING, Final
 
 from homeassistant.util.hass_dict import HassKey
@@ -27,3 +28,11 @@ HEADER_METADATA: Final[str] = "x-amz-meta-backup-info"
 HEADER_CONTENT_DISPOSITION: Final[str] = "Content-Disposition"
 HEADER_CONTENT_TYPE: Final[str] = "Content-Type"
 TAR_CONTENT_TYPE: Final[str] = "application/x-tar"
+
+
+class ErrorCode(StrEnum):
+    UNKNOWN = "unknown"
+    INVALID_AUTH = "invalid_auth"
+    INVALID_BUCKET_NAME = "invalid_bucket_name"
+    SERVER_ERROR = "server_error"
+    CONNECTION_ERROR = "cannot_connect"

@@ -14,6 +14,7 @@ from .const import (
     CONF_BUCKET,
     CONF_REGION,
     CONF_SECRET_KEY,
+    ErrorCode,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,26 +43,26 @@ def create_client(
 async def check_connection(
     session: ClientSession,
     config: Mapping[str, Any],
-) -> str | None:
+) -> ErrorCode | None:
     client = create_client(session, config, bucket_scoped=False)
     try:
         response = await client.head(object_name=config[CONF_BUCKET])
     except ClientConnectionError:
-        return "cannot_connect"
+        return ErrorCode.CONNECTION_ERROR
     except InvalidURL as e:
         _LOGGER.info("Invalid URL: %s", e.url, exc_info=e)
-        return "invalid_bucket_name"
+        return ErrorCode.INVALID_BUCKET_NAME
 
     if response.status == HTTPStatus.OK:
         return None
 
     if response.status in [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN]:
         _LOGGER.info("Received status code %d, indicating auth issue", response.status)
-        return "invalid_auth"
-
-    _LOGGER.error("Received status code %d during connection check", response.status)
+        return ErrorCode.INVALID_AUTH
 
     if 500 <= response.status < 600:
-        return "server_error"
+        _LOGGER.warning("Received server error code %d", response.status)
+        return ErrorCode.SERVER_ERROR
 
-    return "unknown"
+    _LOGGER.error("Received unexpected status code %d", response.status)
+    return ErrorCode.UNKNOWN
