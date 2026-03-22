@@ -6,7 +6,13 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Self
 
 from aiohttp_s3_client.client import MultipartUploader
-from homeassistant.components.backup import AgentBackup, BackupAgent, suggested_filename
+from homeassistant.components.backup import (
+    AgentBackup,
+    BackupAgent,
+    BackupNotFound,
+    BackupReaderWriterError,
+    suggested_filename,
+)
 from homeassistant.core import HomeAssistant, callback
 
 from .const import (
@@ -220,12 +226,35 @@ class ScalewayBackupAgent(BackupAgent):
 
     async def _read_metadata(
         self, *, object_key: str, limiter: asyncio.Semaphore | None
-    ) -> AgentBackup:
+    ) -> AgentBackup | None:
         limiter = limiter or asyncio.Semaphore()
         async with limiter:
             _LOGGER.debug("Reading metadata for object %s", object_key)
             response = await self._client.head(object_name=object_key)
-        meta = response.headers[HEADER_METADATA]
+
+        if response.status == 404:
+            _LOGGER.debug("Object %s not found", object_key)
+            return None
+
+        if response.status in [401, 403]:
+            _LOGGER.error("Unauthorized access for object %s", object_key)
+            return None
+
+        if 500 <= response.status < 600:
+            _LOGGER.warning("Received server error code %d", response.status)
+            raise BackupReaderWriterError("Received response code %d", response.status)
+
+        meta = response.headers.get(HEADER_METADATA)
+        if meta is None:
+            _LOGGER.warning(
+                "Found backup object %s without metadata header", object_key
+            )
+            if _LOGGER.isEnabledFor(logging.DEBUG):
+                headers = " ".join(
+                    f"{key}='{value}'" for key, value in response.headers.items()
+                )
+                _LOGGER.debug("Available object headers: %s", headers)
+            return None
         return AgentBackup.from_dict(json.loads(meta))
 
     async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
@@ -241,8 +270,11 @@ class ScalewayBackupAgent(BackupAgent):
                         )
                     )
 
-        return [task.result() for task in backups]
+        return list(filter(None, (task.result() for task in backups)))
 
     async def async_get_backup(self, backup_id: str, **kwargs: Any) -> AgentBackup:
         object_key = self._calculate_object_key(backup_id)
-        return await self._read_metadata(object_key=object_key, limiter=None)
+        backup = await self._read_metadata(object_key=object_key, limiter=None)
+        if backup is None:
+            raise BackupNotFound(f"Backup {backup_id} not found")
+        return backup
