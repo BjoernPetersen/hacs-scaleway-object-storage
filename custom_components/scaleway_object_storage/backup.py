@@ -27,6 +27,7 @@ from .const import (
     MULTIPART_MIN_SIZE,
     MULTIPART_PART_SIZE,
     TAR_CONTENT_TYPE,
+    ErrorCode,
 )
 
 if TYPE_CHECKING:
@@ -232,17 +233,27 @@ class ScalewayBackupAgent(BackupAgent):
             _LOGGER.debug("Reading metadata for object %s", object_key)
             response = await self._client.head(object_name=object_key)
 
-        if response.status == 404:
-            _LOGGER.debug("Object %s not found", object_key)
-            return None
-
-        if response.status in [401, 403]:
-            _LOGGER.error("Unauthorized access for object %s", object_key)
-            return None
-
-        if 500 <= response.status < 600:
-            _LOGGER.warning("Received server error code %d", response.status)
-            raise BackupAgentError("Received response code %d", response.status)
+        match response.status:
+            case 404:
+                _LOGGER.debug("Object %s not found", object_key)
+                return None
+            case 401 | 403:
+                _LOGGER.error("Unauthorized access for object %s", object_key)
+                return None
+            case status_code if 500 <= status_code < 600:
+                _LOGGER.warning("Received server error code %d", status_code)
+                raise BackupAgentError(
+                    translation_domain=DOMAIN,
+                    translation_key=ErrorCode.SERVER_ERROR,
+                )
+            case other if other != 200:
+                _LOGGER.error("Received unexpected response code %d", other)
+                raise BackupAgentError(
+                    translation_domain=DOMAIN,
+                    translation_key=ErrorCode.UNKNOWN,
+                )
+            case 200:
+                pass
 
         meta = response.headers.get(HEADER_METADATA)
         if meta is None:
@@ -276,5 +287,11 @@ class ScalewayBackupAgent(BackupAgent):
         object_key = self._calculate_object_key(backup_id)
         backup = await self._read_metadata(object_key=object_key, limiter=None)
         if backup is None:
-            raise BackupNotFound(f"Backup {backup_id} not found")
+            raise BackupNotFound(
+                translation_domain=DOMAIN,
+                translation_key=ErrorCode.BACKUP_NOT_FOUND,
+                translation_placeholders={
+                    "backup_id": backup_id,
+                },
+            )
         return backup

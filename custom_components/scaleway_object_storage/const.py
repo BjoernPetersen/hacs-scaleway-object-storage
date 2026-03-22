@@ -1,6 +1,7 @@
 from enum import StrEnum
 from typing import TYPE_CHECKING, Final
 
+from homeassistant.components.backup import BackupNotFound
 from homeassistant.util.hass_dict import HassKey
 
 if TYPE_CHECKING:
@@ -41,3 +42,4 @@ class ErrorCode(StrEnum):
     INVALID_BUCKET_NAME = "invalid_bucket_name"
     SERVER_ERROR = "server_error"
     CONNECTION_ERROR = "cannot_connect"
+    BACKUP_NOT_FOUND = BackupNotFound.error_code

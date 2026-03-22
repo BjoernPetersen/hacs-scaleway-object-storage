@@ -13,7 +13,10 @@
       "message": "Received internal server error from Scaleway."
     },
     "unknown": {
-      "message": "Received unexpected error from Scaleway."
+      "message": "Received unexpected error code from Scaleway."
+    },
+    "backup_not_found": {
+      "message": "Backup with ID {backup_id} not found"
     }
   },
   "selector": {
