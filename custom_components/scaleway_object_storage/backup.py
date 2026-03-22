@@ -9,8 +9,8 @@ from aiohttp_s3_client.client import MultipartUploader
 from homeassistant.components.backup import (
     AgentBackup,
     BackupAgent,
+    BackupAgentError,
     BackupNotFound,
-    BackupReaderWriterError,
     suggested_filename,
 )
 from homeassistant.core import HomeAssistant, callback
@@ -242,7 +242,7 @@ class ScalewayBackupAgent(BackupAgent):
 
         if 500 <= response.status < 600:
             _LOGGER.warning("Received server error code %d", response.status)
-            raise BackupReaderWriterError("Received response code %d", response.status)
+            raise BackupAgentError("Received response code %d", response.status)
 
         meta = response.headers.get(HEADER_METADATA)
         if meta is None:
