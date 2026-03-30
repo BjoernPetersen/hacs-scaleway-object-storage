@@ -1,17 +1,19 @@
-from enum import StrEnum
+"""Constants for the Scaleway Object Storage integration."""
+
 from typing import TYPE_CHECKING, Final
 
-from homeassistant.components.backup import BackupNotFound
+from homeassistant.const import CONF_REGION as HASS_CONF_REGION
 from homeassistant.util.hass_dict import HassKey
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-DOMAIN: Final = "scaleway_object_storage"
+DOMAIN = "scaleway_object_storage"
 
 CONF_SECTION_CREDENTIALS: Final = "credentials"
 CONF_ACCESS_KEY_ID: Final = "access_key_id"
 CONF_SECRET_KEY: Final = "secret_key"
+CONF_REGION: Final = HASS_CONF_REGION
 CONF_BUCKET: Final = "bucket"
 CONF_OBJECT_PREFIX: Final = "object_prefix"
 
@@ -33,13 +35,4 @@ MULTIPART_PART_SIZE: Final[int] = 32 * 2**20
 HEADER_METADATA: Final[str] = "x-amz-meta-backup-info"
 HEADER_CONTENT_DISPOSITION: Final[str] = "Content-Disposition"
 HEADER_CONTENT_TYPE: Final[str] = "Content-Type"
-TAR_CONTENT_TYPE: Final[str] = "application/x-tar"
-
-
-class ErrorCode(StrEnum):
-    UNKNOWN = "unknown"
-    INVALID_AUTH = "invalid_auth"
-    INVALID_BUCKET_NAME = "invalid_bucket_name"
-    SERVER_ERROR = "server_error"
-    CONNECTION_ERROR = "cannot_connect"
-    BACKUP_NOT_FOUND = BackupNotFound.error_code
+CONTENT_TYPE_TAR: Final[str] = "application/x-tar"

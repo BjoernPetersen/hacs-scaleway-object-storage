@@ -1,9 +1,9 @@
-import logging
+"""Config flow for the Scaleway Object Storage integration."""
+
 from typing import TYPE_CHECKING, Any
 
 import voluptuous as vol
-from homeassistant import config_entries
-from homeassistant.const import CONF_REGION
+from homeassistant.config_entries import ConfigFlow
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -15,11 +15,12 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from . import helpers
+from . import exceptions, helpers
 from .const import (
     CONF_ACCESS_KEY_ID,
     CONF_BUCKET,
     CONF_OBJECT_PREFIX,
+    CONF_REGION,
     CONF_SECRET_KEY,
     CONF_SECTION_CREDENTIALS,
     DOCS_PLACEHOLDERS,
@@ -27,13 +28,11 @@ from .const import (
 )
 
 if TYPE_CHECKING:
-    from homeassistant.config_entries import (
-        ConfigFlowResult,
-    )
+    from collections.abc import Mapping
 
-_LOGGER = logging.getLogger(__name__)
+    from homeassistant.config_entries import ConfigFlowResult
 
-STEP_REAUTH_DATA_SCHEMA = vol.Schema(
+SECTION_CREDENTIALS_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_ACCESS_KEY_ID): cv.string,
         vol.Required(CONF_SECRET_KEY): TextSelector(
@@ -42,9 +41,14 @@ STEP_REAUTH_DATA_SCHEMA = vol.Schema(
     }
 )
 
+
+STEP_REAUTH_DATA_SCHEMA = vol.Schema(
+    {vol.Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA)}
+)
+
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_SECTION_CREDENTIALS): section(STEP_REAUTH_DATA_SCHEMA),
+        vol.Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA),
         vol.Required(CONF_REGION, default="fr-par"): SelectSelector(
             SelectSelectorConfig(
                 translation_key="regions",
@@ -57,13 +61,36 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             )
         ),
         vol.Required(CONF_BUCKET): cv.string,
-        vol.Optional(CONF_OBJECT_PREFIX): cv.string,
+        vol.Optional(CONF_OBJECT_PREFIX, default=""): cv.string,
     }
 )
 
 
-class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ScalewayConfigFlow(ConfigFlow, domain=DOMAIN):
+    """ConfigFlow for the Scaleway Object Storage integration."""
+
     VERSION = 1
+
+    @staticmethod
+    def _generate_title(config: Mapping[str, Any]) -> str:
+        prefix = config.get(CONF_OBJECT_PREFIX, "")
+        bucket_name = config[CONF_BUCKET]
+        region = config[CONF_REGION]
+
+        if prefix:
+            base_name = f"{bucket_name}/{prefix}"
+        else:
+            base_name = bucket_name
+
+        return f"{base_name} ({region})"
+
+    @staticmethod
+    def _get_uniqueness_markers(config: Mapping[str, Any]) -> dict[str, Any]:
+        return {
+            CONF_REGION: config[CONF_REGION],
+            CONF_BUCKET: config[CONF_BUCKET],
+            CONF_OBJECT_PREFIX: config[CONF_OBJECT_PREFIX],
+        }
 
     async def _test_connection(
         self,
@@ -71,31 +98,36 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str],
         config: dict[str, Any],
     ) -> bool:
-        session = async_get_clientsession(self.hass)
-        error_code = await helpers.check_connection(session, config)
-        if error_code:
-            errors["base"] = error_code
-            return False
+        """Tests the connection to Scaleway using the given config.
 
-        return True
+        Args:
+            errors: if any errors are detected, they'll be added to this dict
+            config: the current configuration to test
+
+        Returns:
+            True, if the connection succeeded.
+        """
+        session = async_get_clientsession(self.hass)
+        try:
+            await helpers.check_connection(session, config)
+        except exceptions.ScalewayConfigException as e:
+            errors[e.config_schema_key] = e.config_translation_key
+            return False
+        else:
+            return True
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
+        """Handle a flow initiated by the user."""
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            self._async_abort_entries_match(
-                {
-                    CONF_BUCKET: user_input[CONF_BUCKET],
-                    CONF_REGION: user_input[CONF_REGION],
-                    CONF_OBJECT_PREFIX: user_input[CONF_OBJECT_PREFIX],
-                }
-            )
+            self._async_abort_entries_match(self._get_uniqueness_markers(user_input))
 
             if await self._test_connection(errors=errors, config=user_input):
                 return self.async_create_entry(
-                    title=user_input[CONF_BUCKET],
+                    title=self._generate_title(user_input),
                     data=user_input,
                 )
 
@@ -109,13 +141,22 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_reauth(
-        self, reauth_data: dict[str, Any] | None
+        self, entry_data: Mapping[str, Any]
     ) -> ConfigFlowResult:
+        """Start a reauth flow."""
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self,
+        user_input: Mapping[str, Any] | None = None,
+    ) -> ConfigFlowResult:
+        """Handle a reauth flow."""
         errors: dict[str, str] = {}
         entry = self._get_reauth_entry()
 
-        if reauth_data is not None:
-            config = entry.data | {CONF_SECTION_CREDENTIALS: reauth_data}
+        if user_input is not None:
+            # Our schema for reauth_data in this step is just the credentials section of the full config.
+            config = entry.data | user_input
             if await self._test_connection(errors=errors, config=config):
                 return self.async_update_reload_and_abort(
                     entry,
@@ -124,10 +165,10 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
 
         return self.async_show_form(
-            step_id="reauth",
+            step_id="reauth_confirm",
             data_schema=self.add_suggested_values_to_schema(
                 STEP_REAUTH_DATA_SCHEMA,
-                reauth_data or entry.data.get(CONF_SECTION_CREDENTIALS),
+                user_input or entry.data,
             ),
             description_placeholders={
                 "bucket_name": entry.data[CONF_BUCKET],
@@ -139,10 +180,13 @@ class ScalewayConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_reconfigure(
         self, user_data: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
+        """Handle a reconfiguration flow."""
         errors: dict[str, str] = {}
         entry = self._get_reconfigure_entry()
 
         if user_data is not None:
+            self._async_abort_entries_match(self._get_uniqueness_markers(user_data))
+
             if await self._test_connection(errors=errors, config=user_data):
                 return self.async_update_reload_and_abort(
                     entry,
