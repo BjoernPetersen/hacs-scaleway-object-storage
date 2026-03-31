@@ -94,6 +94,7 @@ class ScalewayOptionsFlow(OptionsFlowWithReload):
                 OPTIONS_SCHEMA,
                 self.config_entry.options,
             ),
+            description_placeholders=DOCS_PLACEHOLDERS,
         )
 
 

@@ -42,6 +42,18 @@
       }
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "storage_class": "Storage Class"
+        },
+        "data_description": {
+          "storage_class": "Select the [storage class]({storage_class_docs}) for new backups. Note that Standard One Zone offers reduced durability, so it has a higher chance of data loss. Restoring a backup from Glacier may take several days."
+        }
+      }
+    }
+  },
   "config": {
     "abort": {
       "already_configured": "Account is already configured",
@@ -102,7 +114,6 @@
         },
         "title": "Reconfigure Scaleway Object Storage backup"
       },
-
       "user": {
         "data": {
           "bucket": "Bucket Name",

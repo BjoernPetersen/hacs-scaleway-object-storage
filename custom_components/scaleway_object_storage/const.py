@@ -22,6 +22,7 @@ CONF_STORAGE_CLASS: Final = "storage_class"
 DOCS_PLACEHOLDERS: Final = {
     "api_key_docs": "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/",
     "bucket_docs": "https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/",
+    "storage_class_docs": "https://www.scaleway.com/en/docs/object-storage/concepts/#storage-class",
 }
 
 DATA_BACKUP_AGENT_LISTENERS: HassKey[list[Callable[[], None]]] = HassKey(
