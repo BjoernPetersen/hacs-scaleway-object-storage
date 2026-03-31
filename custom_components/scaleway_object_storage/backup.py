@@ -25,12 +25,14 @@ from homeassistant.core import HomeAssistant, callback
 from . import exceptions, helpers
 from .const import (
     CONF_OBJECT_PREFIX,
+    CONF_STORAGE_CLASS,
     CONTENT_TYPE_TAR,
     DATA_BACKUP_AGENT_LISTENERS,
     DOMAIN,
     HEADER_CONTENT_DISPOSITION,
     HEADER_CONTENT_TYPE,
     HEADER_METADATA,
+    HEADER_STORAGE_CLASS,
     MAX_PARALLEL_HEAD_REQUESTS,
     MAX_PARALLEL_UPLOADS,
     MULTIPART_MIN_SIZE,
@@ -137,6 +139,7 @@ class ScalewayBackupAgent(BackupAgent):
         self._hass = hass
         self._entry = entry
         self._prefix: str = entry.data[CONF_OBJECT_PREFIX]
+        self._storage_class: str | None = entry.options.get(CONF_STORAGE_CLASS)
 
     @property
     def _client(self) -> S3Client:
@@ -208,10 +211,9 @@ class ScalewayBackupAgent(BackupAgent):
                 ),
             )
 
-    @staticmethod
-    def _create_headers(backup: AgentBackup) -> dict[str, str]:
+    def _create_headers(self, backup: AgentBackup) -> dict[str, str]:
         """Creates the headers that will be sent as metadata when uploading the backup to object storage."""
-        return {
+        result = {
             HEADER_CONTENT_DISPOSITION: f'attachment; filename="{suggested_filename(backup)}"',
             HEADER_CONTENT_TYPE: CONTENT_TYPE_TAR,
             # Would be neat to add all keys of the backup dict as separate metadata keys,
@@ -219,6 +221,11 @@ class ScalewayBackupAgent(BackupAgent):
             # parsing back to a AgentBackup object difficult (see async_get_backup).
             HEADER_METADATA: json.dumps(backup.as_dict()),
         }
+
+        if storage_class := self._storage_class:
+            result[HEADER_STORAGE_CLASS] = storage_class
+
+        return result
 
     async def _upload_object(
         self,

@@ -17,6 +17,8 @@ CONF_REGION: Final = HASS_CONF_REGION
 CONF_BUCKET: Final = "bucket"
 CONF_OBJECT_PREFIX: Final = "object_prefix"
 
+CONF_STORAGE_CLASS: Final = "storage_class"
+
 DOCS_PLACEHOLDERS: Final = {
     "api_key_docs": "https://www.scaleway.com/docs/iam/api-cli/using-api-key-object-storage/",
     "bucket_docs": "https://www.scaleway.com/docs/object-storage/how-to/create-a-bucket/",
@@ -35,4 +37,5 @@ MULTIPART_PART_SIZE: Final[int] = 32 * 2**20
 HEADER_METADATA: Final[str] = "x-amz-meta-backup-info"
 HEADER_CONTENT_DISPOSITION: Final[str] = "Content-Disposition"
 HEADER_CONTENT_TYPE: Final[str] = "Content-Type"
+HEADER_STORAGE_CLASS: Final[str] = "x-amz-storage-class"
 CONTENT_TYPE_TAR: Final[str] = "application/x-tar"

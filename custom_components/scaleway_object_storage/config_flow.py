@@ -3,7 +3,8 @@
 from typing import TYPE_CHECKING, Any
 
 import voluptuous as vol
-from homeassistant.config_entries import ConfigFlow
+from homeassistant.config_entries import ConfigFlow, OptionsFlow, OptionsFlowWithReload
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -15,7 +16,7 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from . import exceptions, helpers
+from . import ScalewayConfigEntry, exceptions, helpers
 from .const import (
     CONF_ACCESS_KEY_ID,
     CONF_BUCKET,
@@ -41,7 +42,6 @@ SECTION_CREDENTIALS_SCHEMA = vol.Schema(
     }
 )
 
-
 STEP_REAUTH_DATA_SCHEMA = vol.Schema(
     {vol.Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA)}
 )
@@ -65,11 +65,49 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Required("storage_class", default="STANDARD"): SelectSelector(
+            SelectSelectorConfig(
+                translation_key="storage_classes",
+                options=[
+                    "STANDARD",
+                    "ONEZONE_IA",
+                    "GLACIER",
+                ],
+            )
+        )
+    }
+)
+
+
+class ScalewayOptionsFlow(OptionsFlowWithReload):
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=self.add_suggested_values_to_schema(
+                OPTIONS_SCHEMA,
+                self.config_entry.options,
+            ),
+        )
+
 
 class ScalewayConfigFlow(ConfigFlow, domain=DOMAIN):
     """ConfigFlow for the Scaleway Object Storage integration."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: ScalewayConfigEntry,
+    ) -> OptionsFlow:
+        return ScalewayOptionsFlow()
 
     @staticmethod
     def _generate_title(config: Mapping[str, Any]) -> str:

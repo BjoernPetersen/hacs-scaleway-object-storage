@@ -1,5 +1,8 @@
 {
   "exceptions": {
+    "bucket_not_found": {
+      "message": "Bucket could not be found."
+    },
     "cannot_connect": {
       "message": "Cannot connect to Scaleway service."
     },
@@ -9,14 +12,17 @@
     "invalid_bucket_name": {
       "message": "Invalid bucket name."
     },
-    "server_error": {
-      "message": "Received internal server error from Scaleway."
+    "missing_object_metadata": {
+      "message": "Could not find backup metadata for object {object_key}."
     },
-    "unknown": {
-      "message": "Received unexpected error code from Scaleway."
+    "object_not_found": {
+      "message": "Could not find backup object {object_key}."
     },
-    "backup_not_found": {
-      "message": "Backup with ID {backup_id} not found"
+    "server_unavailable": {
+      "message": "Scaleway service is temporarily unavailable."
+    },
+    "unsuccessful_response": {
+      "message": "Received unsuccessful server response with code {status_code}."
     }
   },
   "selector": {
@@ -27,6 +33,13 @@
         "pl-waw": "Warsaw, Poland",
         "it-mil": "Milan, Italy"
       }
+    },
+    "storage_classes": {
+      "options": {
+        "STANDARD": "Standard Multi-AZ",
+        "ONEZONE_IA": "Standard One Zone",
+        "GLACIER": "Glacier"
+      }
     }
   },
   "config": {
@@ -36,64 +49,86 @@
       "reconfigure_successful": "Successfully reconfigured"
     },
     "error": {
+      "bucket_not_found": "Bucket could not be found.",
       "cannot_connect": "Cannot connect to Scaleway service.",
       "invalid_auth": "The provided access key and secret key are invalid.",
       "invalid_bucket_name": "Invalid bucket name.",
-      "server_error": "Received internal server error from Scaleway.",
-      "unknown": "Received unexpected error from Scaleway."
+      "server_unavailable": "Scaleway service is temporarily unavailable.",
+      "unsuccessful_response": "Received unsuccessful server response from Scaleway."
     },
     "step": {
-      "user": {
-        "title": "Add Scaleway Object Storage bucket",
-        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
-        "data": {
-          "region": "Region",
-          "bucket": "Bucket name",
-          "object_prefix": "Object prefix"
-        },
-        "data_description": {
-          "bucket": "Bucket must already exist and be writable using the provided credentials.",
-          "object_prefix": "A prefix that will be added to every object key."
-        },
+      "reauth_confirm": {
+        "data": {},
+        "description": "Your [Scaleway credentials]({api_key_docs}) for the `{bucket_name}` bucket are no longer valid. Please enter new, valid credentials.",
         "sections": {
           "credentials": {
-            "name": "Credentials",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
-            }
+            },
+            "data_description": {
+              "access_key_id": "Your API key's ID",
+              "secret_key": "The secret part of your API key"
+            },
+            "name": "Credentials"
           }
-        }
+        },
+        "title": "Re-authenticate Scaleway Object Storage bucket"
       },
       "reconfigure": {
-        "title": "Reconfigure Scaleway Object Storage backup",
-        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
         "data": {
-          "region": "Region",
-          "bucket": "Bucket name",
-          "object_prefix": "Object prefix"
+          "bucket": "Bucket Name",
+          "object_prefix": "Object Key Prefix",
+          "region": "Region"
         },
         "data_description": {
           "bucket": "Bucket must already exist and be writable using the provided credentials.",
-          "object_prefix": "A prefix that will be added to every object key."
+          "object_prefix": "A prefix that will be added to every object key.",
+          "region": "The Scaleway region that you have created your bucket in."
         },
+        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
         "sections": {
           "credentials": {
-            "name": "Credentials",
             "data": {
               "access_key_id": "Access Key ID",
               "secret_key": "Secret Key"
-            }
+            },
+            "data_description": {
+              "access_key_id": "Your API key's ID",
+              "secret_key": "The secret part of your API key"
+            },
+            "name": "Credentials"
           }
-        }
+        },
+        "title": "Reconfigure Scaleway Object Storage backup"
       },
-      "reauth": {
-        "title": "Re-authenticate Scaleway Object Storage bucket",
-        "description": "Your [Scaleway credentials]({api_key_docs}) for the `{bucket_name}` bucket are no longer valid. Please enter new, valid credentials.",
+
+      "user": {
         "data": {
-          "access_key_id": "Access Key ID",
-          "secret_key": "Secret Key"
-        }
+          "bucket": "Bucket Name",
+          "object_prefix": "Object Key Prefix",
+          "region": "Region"
+        },
+        "data_description": {
+          "bucket": "Bucket must already exist and be writable using the provided credentials.",
+          "object_prefix": "A prefix that will be added to every object key.",
+          "region": "The Scaleway region that you have created your bucket in."
+        },
+        "description": "Check out the Scaleway docs on how to [create a bucket]({bucket_docs}) or [an API key]({api_key_docs}).",
+        "sections": {
+          "credentials": {
+            "data": {
+              "access_key_id": "Access Key ID",
+              "secret_key": "Secret Key"
+            },
+            "data_description": {
+              "access_key_id": "Your API key's ID",
+              "secret_key": "The secret part of your API key"
+            },
+            "name": "Credentials"
+          }
+        },
+        "title": "Add Scaleway Object Storage backup"
       }
     }
   }
