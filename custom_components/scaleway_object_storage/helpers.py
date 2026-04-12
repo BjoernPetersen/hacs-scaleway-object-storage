@@ -8,12 +8,13 @@ from typing import TYPE_CHECKING, Any
 
 from aiohttp import ClientConnectionError, ClientSession, InvalidURL
 from aiohttp_s3_client import S3Client
+from aiohttp_s3_client.client import AwsDownloadError
 from homeassistant.components.backup import AgentBackup
 
 from . import exceptions
 
 if TYPE_CHECKING:
-    from collections.abc import Generator, Mapping
+    from collections.abc import AsyncGenerator, Generator, Mapping
 
 from .const import (
     CONF_ACCESS_KEY_ID,
@@ -30,21 +31,18 @@ _LOGGER = logging.getLogger(__name__)
 def create_client(
     session: ClientSession,
     config: Mapping[str, Any],
-    *,
-    bucket_scoped: bool = True,
 ) -> S3Client:
     """Creates a new S3Client that can be used to manipulate objects in a bucket."""
     region = config[CONF_REGION]
     bucket_name = config[CONF_BUCKET]
-    if bucket_scoped:
-        if "." in bucket_name:
-            # fall back to canonical path addressing
-            # see https://www.scaleway.com/en/docs/object-storage/faq/#is-there-a-limitation-in-the-bucket-name
-            endpoint_url = f"https://s3.{region}.scw.cloud/{bucket_name}"
-        else:
-            endpoint_url = f"https://{bucket_name}.s3.{region}.scw.cloud"
+    if "." in bucket_name:
+        # fall back to canonical path addressing to avoid certificate issues
+        # see https://www.scaleway.com/en/docs/object-storage/faq/#is-there-a-limitation-in-the-bucket-name
+        endpoint_url = f"https://s3.{region}.scw.cloud/{bucket_name}"
     else:
-        endpoint_url = f"https://s3.{region}.scw.cloud"
+        # virtual-host addressing is generally preferred by S3 API providers because it's easier to
+        # scale
+        endpoint_url = f"https://{bucket_name}.s3.{region}.scw.cloud"
 
     credentials = config[CONF_SECTION_CREDENTIALS]
 
@@ -70,23 +68,21 @@ def raise_for_status(response_status: int) -> None:
 
     match status:
         case HTTPStatus.UNAUTHORIZED | HTTPStatus.FORBIDDEN:
-            raise exceptions.InvalidAuthException
+            raise exceptions.InvalidAuthException from None
         case status if status.is_server_error:
-            raise exceptions.ServerUnavailableError
+            raise exceptions.ServerUnavailableError from None
         case status if status.is_success:
             pass
         case other:
-            raise exceptions.UnsuccessfulResponseError(other.value)
+            raise exceptions.UnsuccessfulResponseError(other.value) from None
 
 
 async def check_connection(
-    session: ClientSession,
-    config: Mapping[str, Any],
+    client: S3Client,
 ) -> None:
     """Attempts to validate config by making a HEAD request to the configured bucket."""
-    client = create_client(session, config, bucket_scoped=False)
     try:
-        response = await client.head(object_name=config[CONF_BUCKET])
+        response = await client.head(object_name="")
     except ClientConnectionError as e:
         raise exceptions.ScalewayConnectionError from e
     except InvalidURL as e:
@@ -95,7 +91,7 @@ async def check_connection(
         # so we assume that an invalid URL must be caused by the bucket name.
         raise exceptions.InvalidBucketNameException from e
 
-    response.close()
+    response.release()
 
     if response.status == HTTPStatus.NOT_FOUND:
         raise exceptions.BucketNotFoundException
@@ -124,7 +120,7 @@ async def read_object_metadata(
         except ClientConnectionError as e:
             raise exceptions.ScalewayConnectionError from e
 
-    response.close()
+    response.release()
 
     if response.status == HTTPStatus.NOT_FOUND:
         raise exceptions.ObjectNotFoundException(object_key=object_key)
@@ -137,9 +133,23 @@ async def read_object_metadata(
 
     try:
         return AgentBackup.from_dict(json.loads(meta))
-    except ValueError as e:
+    except (KeyError, ValueError) as e:
         _LOGGER.warning("Found invalid metadata on object %s", object_key, exc_info=e)
-        raise exceptions.MissingMetadataException(object_key=object_key) from e
+        raise exceptions.MissingMetadataException(object_key=object_key) from None
+
+
+async def list_objects(*, client: S3Client, prefix: str) -> AsyncGenerator[str]:
+    """Lists all object keys in the bucket that match the given prefix."""
+    try:
+        async for items, _ in client.list_objects_v2(prefix=prefix):
+            for meta in items:
+                yield meta.key
+    except ClientConnectionError as e:
+        raise exceptions.ScalewayConnectionError from e
+    except AwsDownloadError as e:
+        if e.status == HTTPStatus.NOT_FOUND:
+            raise exceptions.BucketNotFoundException from None
+        raise_for_status(e.status)
 
 
 def unpack_exception_group[T: Exception](group: ExceptionGroup[T]) -> Generator[T]:

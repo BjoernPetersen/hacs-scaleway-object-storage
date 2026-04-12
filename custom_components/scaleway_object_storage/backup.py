@@ -5,12 +5,12 @@ import hashlib
 import json
 import logging
 from dataclasses import dataclass
+from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Self
 
 import aiohttp
 from aiohttp import ClientConnectionError
 from aiohttp_s3_client.client import (
-    AwsDownloadError,
     AwsUploadError,
     MultipartUploader,
     S3Client,
@@ -18,6 +18,7 @@ from aiohttp_s3_client.client import (
 from homeassistant.components.backup import (
     AgentBackup,
     BackupAgent,
+    OnProgressCallback,
     suggested_filename,
 )
 from homeassistant.core import HomeAssistant, callback
@@ -73,7 +74,7 @@ class _Part:
 
 
 class _ProgressTracker:
-    def __init__(self, on_progress: Callable[[int], None]) -> None:
+    def __init__(self, on_progress: OnProgressCallback) -> None:
         self._on_progress = on_progress
         self._lock = asyncio.Lock()
         self._progress = 0
@@ -81,7 +82,7 @@ class _ProgressTracker:
     async def report_done(self, part: _Part) -> None:
         async with self._lock:
             self._progress += part.size
-            self._on_progress(self._progress)
+            self._on_progress(bytes_uploaded=self._progress)
 
 
 async def async_get_backup_agents(
@@ -156,10 +157,12 @@ class ScalewayBackupAgent(BackupAgent):
     @staticmethod
     async def _yield_chunks(response: aiohttp.ClientResponse) -> AsyncGenerator[bytes]:
         """Yields byte chunks of arbitrary size from a response body, then closes the response."""
-        async with response:
+        try:
             content = response.content
             async for chunk in content.iter_any():
                 yield chunk
+        finally:
+            response.release()
 
     async def async_download_backup(
         self, backup_id: str, **kwargs: Any
@@ -180,10 +183,15 @@ class ScalewayBackupAgent(BackupAgent):
         except ClientConnectionError as e:
             raise exceptions.ScalewayConnectionError from e
 
-        if response.status == 404:
+        if response.status == HTTPStatus.NOT_FOUND:
+            response.release()
             raise exceptions.ObjectNotFoundException(object_key=object_key)
 
-        helpers.raise_for_status(response.status)
+        try:
+            helpers.raise_for_status(response.status)
+        except Exception:
+            response.release()
+            raise
 
         return self._yield_chunks(response)
 
@@ -192,6 +200,7 @@ class ScalewayBackupAgent(BackupAgent):
         *,
         open_stream: OpenStream,
         backup: AgentBackup,
+        on_progress: OnProgressCallback,
         **kwargs: Any,
     ) -> None:
         """Upload a backup.
@@ -202,13 +211,12 @@ class ScalewayBackupAgent(BackupAgent):
         """
         if backup.size < MULTIPART_MIN_SIZE:
             await self._upload_object(backup=backup, open_stream=open_stream)
+            on_progress(bytes_uploaded=backup.size)
         else:
             await self._upload_multipart_object(
                 backup=backup,
                 open_stream=open_stream,
-                progress_tracker=_ProgressTracker(
-                    lambda i: _LOGGER.debug("Uploaded %d bytes", i)
-                ),
+                progress_tracker=_ProgressTracker(on_progress),
             )
 
     def _create_headers(self, backup: AgentBackup) -> dict[str, str]:
@@ -246,12 +254,16 @@ class ScalewayBackupAgent(BackupAgent):
         except ClientConnectionError as e:
             raise exceptions.ScalewayConnectionError from e
 
-        async with response:
+        try:
             helpers.raise_for_status(response.status)
+        finally:
+            response.release()
 
     @staticmethod
     async def _read_fixed_sized_parts(
         stream: AsyncIterator[bytes],
+        *,
+        part_size: int,
     ) -> AsyncGenerator[_Part]:
         """Takes a stream of byte chunks of arbitrary size and yields the data as evenly-sized chunks (except for the last chunk)."""
         buffer = bytearray()
@@ -260,13 +272,13 @@ class ScalewayBackupAgent(BackupAgent):
         async for chunk in stream:
             buffer.extend(chunk)
             with memoryview(buffer) as view:
-                while len(buffer) - offset >= MULTIPART_PART_SIZE:
-                    end = offset + MULTIPART_PART_SIZE
+                while len(buffer) - offset >= part_size:
+                    end = offset + part_size
                     part_bytes = view[offset:end]
                     yield _Part.from_data(part_bytes.tobytes())
                     offset = end
 
-            if offset and offset >= MULTIPART_PART_SIZE:
+            if offset and offset >= part_size:
                 # compact buffer
                 buffer = bytearray(buffer[offset:])
                 offset = 0
@@ -281,13 +293,13 @@ class ScalewayBackupAgent(BackupAgent):
     async def _perform_upload(
         limiter: asyncio.Semaphore,
         upload_coro: Awaitable[None],
-        report_progress: Awaitable[None],
+        report_done: Awaitable[None],
     ) -> None:
         async with limiter:
             _LOGGER.debug("Starting upload of a new part")
             try:
                 await upload_coro
-                await report_progress
+                await report_done
             except ClientConnectionError as e:
                 raise exceptions.ScalewayConnectionError from e
             except AwsUploadError as e:
@@ -315,25 +327,35 @@ class ScalewayBackupAgent(BackupAgent):
                 # Limits how many parts we upload at once.
                 limiter = asyncio.Semaphore(MAX_PARALLEL_UPLOADS)
 
-                async with asyncio.TaskGroup() as tg:
-                    async for part in self._read_fixed_sized_parts(stream):
-                        # Acquiring the semaphore here ensures that we don't read more than one
-                        # part ahead of the upload into memory.
-                        async with limiter:
-                            upload = uploader.put_part(
-                                data=part.data,
-                                content_sha256=part.digest,
-                            )
-                            tg.create_task(
-                                self._perform_upload(
-                                    limiter,
-                                    upload,
-                                    report_progress=progress_tracker.report_done(part),
-                                ),
-                                # Eagerly start the task to make sure it acquires the semaphore
-                                eager_start=True,  # type: ignore[call-arg]
-                            )
-
+                try:
+                    async with asyncio.TaskGroup() as tg:
+                        async for part in self._read_fixed_sized_parts(
+                            stream, part_size=MULTIPART_PART_SIZE
+                        ):
+                            # Acquiring the semaphore here ensures that we don't read more than one
+                            # part ahead of the upload into memory.
+                            async with limiter:
+                                upload = uploader.put_part(
+                                    data=part.data,
+                                    content_sha256=part.digest,
+                                )
+                                tg.create_task(
+                                    self._perform_upload(
+                                        limiter,
+                                        upload,
+                                        report_done=progress_tracker.report_done(part),
+                                    ),
+                                    # Eagerly start the task to make sure it acquires the semaphore
+                                    eager_start=True,
+                                )
+                except* exceptions.ScalewayException as e:
+                    # Each part upload task could raise a ScalewayException.
+                    task_exceptions = list(helpers.unpack_exception_group(e))
+                    if len(task_exceptions) > 1:
+                        _LOGGER.warning(
+                            "Encountered multiple exceptions while uploading multipart upload parts, only re-reraising the first"
+                        )
+                    raise task_exceptions[0] from None
         except ClientConnectionError as e:
             raise exceptions.ScalewayConnectionError from e
         except AwsUploadError as e:
@@ -355,14 +377,16 @@ class ScalewayBackupAgent(BackupAgent):
         except ClientConnectionError as e:
             raise exceptions.ScalewayConnectionError from e
 
-        async with response:
-            if response.status == 404:
+        try:
+            if response.status == HTTPStatus.NOT_FOUND:
                 _LOGGER.info(
                     "Tried to delete object that doesn't exist: %s", object_key
                 )
                 # The object wasn't found. Since we were going to delete it anyway, that's fine.
                 return
             helpers.raise_for_status(response.status)
+        finally:
+            response.release()
 
     async def _try_read_metadata(
         self, *, object_key: str, limiter: asyncio.Semaphore
@@ -376,6 +400,13 @@ class ScalewayBackupAgent(BackupAgent):
         except exceptions.MissingMetadataException:
             # Assume we encountered an unrelated object.
             return None
+        except exceptions.ObjectNotFoundException as e:
+            _LOGGER.debug(
+                "Unknown object was requested: %s",
+                e.object_key,
+            )
+            # Likely caused by a race condition (object was deleted between listing and reading)
+            return None
 
     async def async_list_backups(self, **kwargs: Any) -> list[AgentBackup]:
         """List backups."""
@@ -384,39 +415,21 @@ class ScalewayBackupAgent(BackupAgent):
 
         try:
             async with asyncio.TaskGroup() as tg:
-                try:
-                    async for items, _ in self._client.list_objects_v2(
-                        prefix=self._prefix
-                    ):
-                        for meta in items:
-                            # Acquire the semaphore here to ensure we don't read too far ahead of
-                            # the HEAD requests.
-                            async with limiter:
-                                task = tg.create_task(
-                                    self._try_read_metadata(
-                                        object_key=meta.key, limiter=limiter
-                                    ),
-                                    # Eagerly start the task to make sure it acquires the semaphore.
-                                    eager_start=True,  # type: ignore[call-arg]
-                                )
-                                backups.append(task)
-                # These two except clauses handle potential errors from list_objects_v2
-                except ClientConnectionError as e:
-                    raise exceptions.ScalewayConnectionError from e
-                except AwsDownloadError as e:
-                    helpers.raise_for_status(e.status)
-        except* exceptions.ObjectNotFoundException as e:
-            for object_exception in helpers.unpack_exception_group(e):
-                _LOGGER.debug(
-                    "Ignoring missing object %s during backup listing (likely a race condition)",
-                    object_exception.object_key,
-                )
-        except* exceptions.InvalidAuthException as e:
-            _LOGGER.debug(
-                "Encountered invalid auth exception during list operation, triggering reauth"
-            )
-            self._entry.async_start_reauth(self._hass)
-            raise next(helpers.unpack_exception_group(e)) from None
+                async for object_key in helpers.list_objects(
+                    client=self._client, prefix=self._prefix
+                ):
+                    # Acquire the semaphore here to ensure we don't read too far ahead of
+                    # the HEAD requests.
+                    async with limiter:
+                        task = tg.create_task(
+                            self._try_read_metadata(
+                                object_key=object_key, limiter=limiter
+                            ),
+                            # Eagerly start the task to make sure it acquires the semaphore.
+                            eager_start=True,
+                        )
+                        backups.append(task)
+
         except* exceptions.ScalewayException as e:
             # Each task could raise a ScalewayException.
             task_exceptions = list(helpers.unpack_exception_group(e))

@@ -8,7 +8,7 @@ from homeassistant.exceptions import (
     ConfigEntryError,
     ConfigEntryNotReady,
 )
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers import aiohttp_client
 
 if TYPE_CHECKING:
     from aiohttp_s3_client import S3Client
@@ -22,9 +22,10 @@ type ScalewayConfigEntry = ConfigEntry[S3Client]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ScalewayConfigEntry) -> bool:
     """Set up an integration config entry."""
-    session = async_get_clientsession(hass)
+    session = aiohttp_client.async_get_clientsession(hass)
+    client = helpers.create_client(session, entry.data)
     try:
-        await helpers.check_connection(session, entry.data)
+        await helpers.check_connection(client)
     except ConfigEntryNotReady, ConfigEntryError, ConfigEntryAuthFailed:
         # Re-raise as they are
         raise
@@ -36,11 +37,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ScalewayConfigEntry) -> 
             translation_placeholders=e.translation_placeholders,
         ) from e
 
-    entry.runtime_data = helpers.create_client(session, entry.data)
+    entry.runtime_data = client
 
     # Notify backup listeners
     def notify_backup_listeners() -> None:
-        for listener in hass.data.get(DATA_BACKUP_AGENT_LISTENERS, []):
+        listeners = hass.data.get(DATA_BACKUP_AGENT_LISTENERS, [])
+        for listener in list(listeners):
             listener()
 
     entry.async_on_unload(entry.async_on_state_change(notify_backup_listeners))
