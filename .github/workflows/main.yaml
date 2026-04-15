@@ -18,7 +18,7 @@ jobs:
     uses: BlindfoldedSurgery/actions-meta/.github/workflows/required.yml@v2
 
   lint:
-    uses: BlindfoldedSurgery/actions-python/.github/workflows/lint.yml@v6
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/lint.yml@v11
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
@@ -27,7 +27,7 @@ jobs:
       debian-version: trixie
 
   test:
-    uses: BlindfoldedSurgery/actions-python/.github/workflows/test.yml@v6
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/test.yml@v11
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
