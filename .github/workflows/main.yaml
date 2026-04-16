@@ -22,7 +22,6 @@ jobs:
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
-      build-tool: uv
       python-version: '3.14'
       debian-version: trixie
 
@@ -31,7 +30,6 @@ jobs:
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
-      build-tool: uv
       python-version: '3.14'
       debian-version: trixie
 
