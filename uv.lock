@@ -462,7 +462,7 @@ wheels = [
 
 [[package]]
 name = "bluetooth-adapters"
-version = "2.1.1"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiooui" },
@@ -471,14 +471,14 @@ dependencies = [
     { name = "uart-devices" },
     { name = "usb-devices" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/8a/b37a52f5243cf8bd30cc7e25c1128750d129db15a7b2c7ef107ddb7429f9/bluetooth_adapters-2.1.1.tar.gz", hash = "sha256:f289e0f08814f74252a28862f488283680584744430d7eac45820f9c20ba041a", size = 17234, upload-time = "2025-09-12T17:18:48.906Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3d/e0/6f7d10ffd8e5b62fc0998c285991925aaa9b727521bede0e29a0b0084a94/bluetooth_adapters-2.4.0.tar.gz", hash = "sha256:e8a61935a867deb8af981e986bdf504c4398895ff254eac626790184a4fdd1e3", size = 17501, upload-time = "2026-05-26T14:28:58.347Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/11/8f344d5379df2d31eea73052128136702630f28b5fb55a8d30250c8112e2/bluetooth_adapters-2.1.1-py3-none-any.whl", hash = "sha256:1f93026e530dcb2f4515a92955fa6f85934f928b009a181ee57edc8b4affd25c", size = 20276, upload-time = "2025-09-12T17:18:47.763Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/ba/f11151a72f782bf24908c2b57163a2ff854024594c4ff3d04f1c47f40ed0/bluetooth_adapters-2.4.0-py3-none-any.whl", hash = "sha256:f2841c49e8750658ecb8c1d46d2c05a9de4740362eb83e3e7e501d3092c0377e", size = 20604, upload-time = "2026-05-26T14:28:57.107Z" },
 ]
 
 [[package]]
 name = "bluetooth-auto-recovery"
-version = "1.5.3"
+version = "1.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bluetooth-adapters" },
@@ -486,9 +486,9 @@ dependencies = [
     { name = "pyric" },
     { name = "usb-devices" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ab/8b/1d6f338ced9b47965382c8f1325bf3d22be65e6f838b4e465227c52d333c/bluetooth_auto_recovery-1.5.3.tar.gz", hash = "sha256:0b36aa6be84474fff81c1ce328f016a6553272ac47050b1fa60f03e36a8db46d", size = 12798, upload-time = "2025-09-13T17:17:09.273Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/4e/14070e4e938069ef96fd1bfb949ea257ce7d807920f43b945bebde46c458/bluetooth_auto_recovery-1.6.4.tar.gz", hash = "sha256:c69a9f3b5e00239ab005d808aa5e7afa3c36a82f86e9531b6c7682bde1bc3ecc", size = 14827, upload-time = "2026-05-25T02:37:03.076Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/ab/518f14a3c3e43c34c638485cd29bfa80bd35da5a151a434f7ac3c86e1e83/bluetooth_auto_recovery-1.5.3-py3-none-any.whl", hash = "sha256:5d66b859a54ef20fdf1bd3cf6762f153e86651babe716836770da9d9c47b01c4", size = 11750, upload-time = "2025-09-13T17:17:07.681Z" },
+    { url = "https://files.pythonhosted.org/packages/fd/89/0dc9270c3c8640ea74fb35eef20e00c5fbdf929b4aeb6797cfa3e2f29750/bluetooth_auto_recovery-1.6.4-py3-none-any.whl", hash = "sha256:39485c41e17a2d4887c1fbf04b4e2fd37f0f3c7898db388753e026ca3addf055", size = 13471, upload-time = "2026-05-25T02:37:01.788Z" },
 ]
 
 [[package]]
@@ -505,30 +505,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.43.14"
+version = "1.43.17"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/79/4b/616367e871ce3f1cb3e8545a97736b6331b9fb081497f2d44c5b2aa6959d/boto3-1.43.14.tar.gz", hash = "sha256:5c0a994b3182061ee101812e721100717a4d664f9f4ceaf4a86b6d032ce9fc2d", size = 113142, upload-time = "2026-05-22T19:28:47.861Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d8/6b/80f6bf4f6253c2221c70a2b70af72038bb6e8820ac4547f2ba7d4efcb6be/boto3-1.43.17.tar.gz", hash = "sha256:8cf48babdd52ff0e2d891dc661143780b361d3776a3be06cd719da0696995074", size = 113167, upload-time = "2026-05-28T19:39:18.157Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/00/59cb9329c18e2d3aa23062ceaa87d065f2e81e7d2931df24d64e9a7815aa/boto3-1.43.14-py3-none-any.whl", hash = "sha256:574335744656cfed0b362a0a0467aaf2eb2bf15526edcd02d31d3c661f4b09e4", size = 140536, upload-time = "2026-05-22T19:28:46.49Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/1e/30b218998dee295873f33c591bb5daf08c42ec27e5fb0ebb13977677e96f/boto3-1.43.17-py3-none-any.whl", hash = "sha256:f6b3862a0b14e237f9323223ee76b0563e87a6bbe6d94a42e7b008a901ba8950", size = 140538, upload-time = "2026-05-28T19:39:15.75Z" },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.43.14"
+version = "1.43.17"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/3c/798d2f7deb118241930c7c6bcfb0b970d3f0245bf580700663199aeed2c3/botocore-1.43.14.tar.gz", hash = "sha256:b9e500737e43d2f147c9d4e23b54360335e77d4c0ba90a318f51b65e06cb8516", size = 15382604, upload-time = "2026-05-22T19:28:36.363Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/30/37/a9227caa820189bce55564b6cfc9bbf22f6c984e6b0f0c614348424fb84a/botocore-1.43.17.tar.gz", hash = "sha256:27f4ecb80cf1e5be70415fc4a4d3db3907d41ef8178c9df822364f275427d375", size = 15417107, upload-time = "2026-05-28T19:39:04.577Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/27/7e/6e64821077cd2efc4aa51b7d638fb6d48e1c7c450201c529fbaf1de8bfd3/botocore-1.43.14-py3-none-any.whl", hash = "sha256:1f4a2a95ea78c10398e78431e98c1fe47adb54a7b10a32975144c1f541186658", size = 15061424, upload-time = "2026-05-22T19:28:32.682Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/ff/1625713b2ecac9f9bb65c7a51e71cb206b3089ba38f86ba5eff34e947176/botocore-1.43.17-py3-none-any.whl", hash = "sha256:499af7c942ecfd404322974e82c6b5d05a8ea16e9f19320b353e16f401adc5b4", size = 15097131, upload-time = "2026-05-28T19:38:59.775Z" },
 ]
 
 [[package]]
@@ -711,23 +711,23 @@ wheels = [
 
 [[package]]
 name = "dbus-fast"
-version = "5.0.3"
+version = "5.0.16"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c4/ca/07308e817dbf95bc4dbe806f25a209d905c590ef8f61f322ead9ef1aceae/dbus_fast-5.0.3.tar.gz", hash = "sha256:fe7ca38beab5dfdde00fa44b364334797a181bfecc91c98601e8285fac18c055", size = 80219, upload-time = "2026-05-20T20:00:56.668Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c2/26/a75b4f79c56bd1f24e4cf85399b28a1a607d1052b9e66aceb961d79a6d3f/dbus_fast-5.0.16.tar.gz", hash = "sha256:24d0a86f32acb209a41806d20cf8a9207e4d46760e23c32479d1951d43739080", size = 82570, upload-time = "2026-05-27T19:19:33.316Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/73/9b/e7f3664c2a87ef7b1e77fe14e9c2dee6e879ccf06e667ba325cea5c60ee0/dbus_fast-5.0.3-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:2b9365c4bd2353f24d9bf742fbdcf06e46a431aedebdf537ef43348cf5d04b6e", size = 809711, upload-time = "2026-05-20T20:09:19.739Z" },
-    { url = "https://files.pythonhosted.org/packages/3d/f4/bb8ce41aa1ee537c899b4c6c3df1fcc14eefa481e5ee7a01ebc9545d5bbc/dbus_fast-5.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:47841f693d3349f3eecbe9fee790c3807c64069735c2d1247651a74e7f910bf5", size = 851695, upload-time = "2026-05-20T20:09:21.712Z" },
-    { url = "https://files.pythonhosted.org/packages/c1/ff/ad3e3ec5e723a6010bd6eb8914b85fe628fc67a1baa1e01b75e3744ca1d3/dbus_fast-5.0.3-cp314-cp314-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:9328d4c70bac1e58b02e12f73fb746fc39431230fc65b903987087dcaf3a58e3", size = 831293, upload-time = "2026-05-20T20:09:23.698Z" },
-    { url = "https://files.pythonhosted.org/packages/0c/ca/46b6ccaa414e741a6dead7b6c07a9d5fbda5126a7a2dcda2dad88735f115/dbus_fast-5.0.3-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:7ead8e5e7b92fcfb0bfd4c9fc6de8a804e785ada642a6825f6690d778d2fc74d", size = 849906, upload-time = "2026-05-20T20:00:54.786Z" },
-    { url = "https://files.pythonhosted.org/packages/be/07/6f01e01271e33f465a0ba370390949d2968f3188c4b3bd8b63e94b9aca8d/dbus_fast-5.0.3-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:a66395a97d5098f6b2e1ee7678a86ffdc6ccf0abd860a52a91e20b7175581a7f", size = 816832, upload-time = "2026-05-20T20:09:25.968Z" },
-    { url = "https://files.pythonhosted.org/packages/80/36/4d07d4c7642923991966b848c4f210cb920f10635f849b998334ff4c1fbc/dbus_fast-5.0.3-cp314-cp314-musllinux_1_2_riscv64.whl", hash = "sha256:bf4a72c720aae11d5e02988039aa6dfb1d93b85962a96a780983813005ecb30c", size = 831704, upload-time = "2026-05-20T20:09:27.875Z" },
-    { url = "https://files.pythonhosted.org/packages/b1/d0/22c5e12ca359d1e946ddbd14b1e999b3908eedd9517c76f3520bc767e639/dbus_fast-5.0.3-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:cc441f6207b6b0501307d949abe703a1569e2b7c4c41412172ff3923080b3fef", size = 859362, upload-time = "2026-05-20T20:09:29.752Z" },
-    { url = "https://files.pythonhosted.org/packages/6a/fc/718a0c9bc6cea6ed8ee870251c4b1695b9fc9277ce17f4069ea7a43a487a/dbus_fast-5.0.3-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:db3fbf445f1b3331999adf5f3049b7a2755261547c559f8edc42f025c487a9cf", size = 1536053, upload-time = "2026-05-20T20:09:33.988Z" },
-    { url = "https://files.pythonhosted.org/packages/fa/6b/36a03b5296e7d7e3bb646f2fcf5d93e3ddeb8d437a727ada355730e3d44c/dbus_fast-5.0.3-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:40947aa7bc81e60a3b10863dadc0a282cb3bdd841f3cc5aa07e75acffb7c2033", size = 1611201, upload-time = "2026-05-20T20:09:36.208Z" },
-    { url = "https://files.pythonhosted.org/packages/33/4c/55aec96b6a3d373dfd0f050ae3295d9d3103c11371163eb10c75bd89fa48/dbus_fast-5.0.3-cp314-cp314t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:497692168f291719360e5a5a74c50e6ba3b97dd55a712f370a02588bfae7cdef", size = 824747, upload-time = "2026-05-20T20:09:38.177Z" },
-    { url = "https://files.pythonhosted.org/packages/6a/88/eaedfbe90db90bce8c37dad32752bf3321b1844ddbcc6458c3ebd7e5bd00/dbus_fast-5.0.3-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:f5f127fe27ea739c9b271651835506456679549b096c46fa7f1b1f09544f261c", size = 1551856, upload-time = "2026-05-20T20:09:40.267Z" },
-    { url = "https://files.pythonhosted.org/packages/c2/29/c35379e5844815837ce0c8ace036ecb6f52cae5bfdac03f1676d220cfe26/dbus_fast-5.0.3-cp314-cp314t-musllinux_1_2_riscv64.whl", hash = "sha256:5ee8204f2eb20e24d147da667fb7d7b5d782c7440b488b9a445ad5af9bcb2bc5", size = 826671, upload-time = "2026-05-20T20:09:42.548Z" },
-    { url = "https://files.pythonhosted.org/packages/e2/f8/0fe0bb9773cb77c61e2160e5475b9c0599a1cb881835b7249f35376da0b4/dbus_fast-5.0.3-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:fec10beceab11f57d86ddfdcbdfd9d19cea912ed759572037f0bb473348eac29", size = 1629897, upload-time = "2026-05-20T20:09:44.901Z" },
+    { url = "https://files.pythonhosted.org/packages/88/6e/827fe09289b73f03fbaaa07493e7944dd16266429bf081ba1c62094af03e/dbus_fast-5.0.16-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:874bbd1fff34054c10b1062676334fcf170f32a0f0f9f21d2a9d1bf22ef70b35", size = 810903, upload-time = "2026-05-27T19:28:09.025Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/1d/8a9caaf953c2212538b9f210edd2507ecd2dc90414ac688b030917f6d1ec/dbus_fast-5.0.16-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:07554554373441f562d1469bd73d024dd3144c9725375bbffbe8b3375bf464fe", size = 855741, upload-time = "2026-05-27T19:28:10.49Z" },
+    { url = "https://files.pythonhosted.org/packages/e8/3d/509e45e1739e96b08461c281eb257f564fd7533f9cabd067f0c4694b725d/dbus_fast-5.0.16-cp314-cp314-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:e6fc1831c702725eb4875d69c877700d95e7c3fa8542f4edaad318c6ba3e66f2", size = 833659, upload-time = "2026-05-27T19:28:12.062Z" },
+    { url = "https://files.pythonhosted.org/packages/30/8d/3237d8a6826a302095b258f183ddf236d345b4070af6e6bb65da3f5dfe25/dbus_fast-5.0.16-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:8447d1ab3cd7dc9976805dda5903453d0fdb8aaab870536f3bcaf6b1f58800a3", size = 853989, upload-time = "2026-05-27T19:19:30.644Z" },
+    { url = "https://files.pythonhosted.org/packages/6a/2b/f9cc24ebb6f4175bc5760b46d13ad108cd634dfb41c474245bd1fd846091/dbus_fast-5.0.16-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:d36ff2f0f6a5fd6dae96a09f48783ee7de51bf12d0da18a13edf19766bd0b99a", size = 818691, upload-time = "2026-05-27T19:28:14.271Z" },
+    { url = "https://files.pythonhosted.org/packages/95/58/a20c6e76b6bc037d5b565531f501d427dcd70fe5a903dcc7984dfe3ef287/dbus_fast-5.0.16-cp314-cp314-musllinux_1_2_riscv64.whl", hash = "sha256:fc43f5a7e7db86728e9925757a53a717eb3fec27de54e7bbc688cd65b8e9028c", size = 833842, upload-time = "2026-05-27T19:28:15.719Z" },
+    { url = "https://files.pythonhosted.org/packages/30/0c/2cb74502755be1957b81faf1cf2e57b9b12764afaf7ac30b99c5ebe6e615/dbus_fast-5.0.16-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:56e64ff9d1a1f503e07a940f861bf6dc80f24602425cb6f384d69bdc7fe7071f", size = 862625, upload-time = "2026-05-27T19:28:17.309Z" },
+    { url = "https://files.pythonhosted.org/packages/71/53/d0a0df847025e57a5aa58b0d711d74859a778ca3c28454d10f3b1a554bc3/dbus_fast-5.0.16-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:2d8943d0b92ec9f49e37aed6224515ce161eb2b5df5e9fd3e1d692f35efbe48b", size = 1534575, upload-time = "2026-05-27T19:28:20.471Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/82/1423c68091804af7711e940128cacd5494d8d3be645609ae0b23d9104562/dbus_fast-5.0.16-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:e2f96e7da851b0dc9e0bc1e00d8b9cd6f227469b6e48e1b2ad474e44ff91841b", size = 1613383, upload-time = "2026-05-27T19:28:22.106Z" },
+    { url = "https://files.pythonhosted.org/packages/20/88/465a6e79cd77e8dc1451fdcfd8080ff72f6693f0a8b25b127df81283f241/dbus_fast-5.0.16-cp314-cp314t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:2832c5eefcc5b4e0623a27e20751ca34006d7fe73b21d58ef859aa2cef0a8ec8", size = 821797, upload-time = "2026-05-27T19:28:23.698Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/1f/11d8d709736644685dbaa191d65dd313869fec688ff75eaed542f0625895/dbus_fast-5.0.16-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:d2c9ae45a01d5f2e27a9508159d6e3c34e6714b485884000839daf5320d76da9", size = 1549870, upload-time = "2026-05-27T19:28:25.438Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/db/1b01c80c81202ff81e96d1ce92a45296a818bd81c705ea5f032536d591b1/dbus_fast-5.0.16-cp314-cp314t-musllinux_1_2_riscv64.whl", hash = "sha256:e46276642f787a345f127389ff36a90ba9e4df6537b852d8afdc12e2b2f9bb91", size = 822814, upload-time = "2026-05-27T19:28:27.484Z" },
+    { url = "https://files.pythonhosted.org/packages/88/7c/25ce2a94711a7479d2786de321c7c5fbbf99ab8c67eba1bf5dd5bd80c830/dbus_fast-5.0.16-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:f41ca52046e41775c0784148c7b6b636539722bcc1412bae3139ac7295883265", size = 1629346, upload-time = "2026-05-27T19:28:29.121Z" },
 ]
 
 [[package]]
@@ -870,7 +870,7 @@ wheels = [
 
 [[package]]
 name = "habluetooth"
-version = "6.2.1"
+version = "6.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "async-interrupt" },
@@ -882,27 +882,27 @@ dependencies = [
     { name = "btsocket" },
     { name = "dbus-fast", marker = "sys_platform == 'linux'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/d1/95b32552034aec187c3780cbf837033c79445e4b9c5e08168a38f7a7f926/habluetooth-6.2.1.tar.gz", hash = "sha256:1781c806115ab539fece46816e542ab469d667b801877b58d26c03a74460d8fd", size = 53488, upload-time = "2026-05-22T02:07:47.107Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/08/def2a769a3e860f80dfa1de8dc1182b56c22898c842f8536cd92692c704e/habluetooth-6.8.0.tar.gz", hash = "sha256:2651d6023ecef685b238cbd399d0ead821570c53f35702956c6def9ae5ca4b04", size = 79564, upload-time = "2026-05-29T15:39:53.949Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/d3/8d370f7173331f0fd6cacbf16960deb1bdde7f03397d9b443956fd7449a7/habluetooth-6.2.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:83b77df07cd2e3369bac2e477dee08a19cd55bc9d86d7f092aaa01a2a19b5908", size = 586122, upload-time = "2026-05-22T02:17:42.788Z" },
-    { url = "https://files.pythonhosted.org/packages/e6/c9/51fcac5cf386e7333d857d2a1636e264ddbe2743c3f5281bf9368c61c46e/habluetooth-6.2.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:59b9adc6e3547ae926e09c0defab12be7615616bc2b2cf123b6867aeb58c99fb", size = 687280, upload-time = "2026-05-22T02:17:44.333Z" },
-    { url = "https://files.pythonhosted.org/packages/61/97/57affc267fcca24ced2209da3220af36e540c8b8bba1c549ec7f7836aa3d/habluetooth-6.2.1-cp314-cp314-manylinux2014_armv7l.manylinux_2_17_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:89b751af32ae39b1e62ad146a035dc87c84c2279d2ac130a2992495e06859eae", size = 655912, upload-time = "2026-05-22T02:17:46.009Z" },
-    { url = "https://files.pythonhosted.org/packages/fe/02/9d4cebf9dd35ab160030f8e50e7603ce23579ecb5a265a590587dbdcea85/habluetooth-6.2.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:b302c6c824e2b27abb06d829b4c79b2630c2d8ebb39ac05bc1cebaa7a8aab2db", size = 725740, upload-time = "2026-05-22T02:17:47.424Z" },
-    { url = "https://files.pythonhosted.org/packages/00/d0/3c060e5add3bf5e1aecce2b9eec72497d7a8a9cfeaaccc22c3542c86950b/habluetooth-6.2.1-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:0c8dfd66c2097477b89883dedaaa62f814584feea74fd6993d09c8dc326692a6", size = 724676, upload-time = "2026-05-22T02:07:44.808Z" },
-    { url = "https://files.pythonhosted.org/packages/8b/43/4754f1b487fb11305fbe4d211976927e7d573825b67bd6f960207bc95951/habluetooth-6.2.1-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:c0c97bc504c53efccccfa66723bb7209d313c6ea9e55f4026f1f787cc9ee955f", size = 695547, upload-time = "2026-05-22T02:17:48.933Z" },
-    { url = "https://files.pythonhosted.org/packages/49/de/eb39f4f344b632606c15c281759003c7871bf216fe195fadc443f588f82d/habluetooth-6.2.1-cp314-cp314-musllinux_1_2_armv7l.whl", hash = "sha256:dcf054ce00c2f42c6d1572b93f95707f5a1617a57d99d5b903d5716a92915404", size = 659315, upload-time = "2026-05-22T02:17:50.272Z" },
-    { url = "https://files.pythonhosted.org/packages/09/89/aa7d599ab99647585b6f442ed3a2addc428e4d26e71272e27b9e0b307860/habluetooth-6.2.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:a6feedf74b14ff5cb850ff1eb3ed79575a5aeca23abf4d1a889eafa38d6b96e5", size = 732448, upload-time = "2026-05-22T02:17:52.462Z" },
-    { url = "https://files.pythonhosted.org/packages/cd/0f/478c95ccb0dfd14f0ead5359d253c47e28e3d0973dc10adf3c5abc541b70/habluetooth-6.2.1-cp314-cp314-win32.whl", hash = "sha256:f6b00e0f75f5f4e166b82a521d50e3ef60fa5676d13f41a045899582ca3b135f", size = 473618, upload-time = "2026-05-22T02:17:53.954Z" },
-    { url = "https://files.pythonhosted.org/packages/33/91/3caf109909900fe0df09ddee47bfa61c509485befd3fd61b63a48f2036f1/habluetooth-6.2.1-cp314-cp314-win_amd64.whl", hash = "sha256:b7d3c6fc28dc29fb8aa9bebe0cdd6414d9eb306ffb98d3c0b01d708cee42d26b", size = 552485, upload-time = "2026-05-22T02:17:55.395Z" },
-    { url = "https://files.pythonhosted.org/packages/67/65/4a8b9c20ab9485de2cac90267ee7e9320987a432d792dfd8a7196e400032/habluetooth-6.2.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:6a9d9f5065aca09cdbc1764c2329fb2118441e30200783b0ef8e2fcf8ddc1e6c", size = 1159993, upload-time = "2026-05-22T02:17:57.496Z" },
-    { url = "https://files.pythonhosted.org/packages/40/dd/3a72934f6dcb60c98eb38cfcbc144a1429427892539f4c22bdd677a0df8f/habluetooth-6.2.1-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:88f69f36557b7e17e685359ab7c41de27231c1e5c45a040da1815595701fad57", size = 1313967, upload-time = "2026-05-22T02:18:00.621Z" },
-    { url = "https://files.pythonhosted.org/packages/3f/38/eca6fff17411a1982d6459c173b2a3caa43b7e6925c8892ea8b7981b0f37/habluetooth-6.2.1-cp314-cp314t-manylinux2014_armv7l.manylinux_2_17_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:b39521014fc759600cfdc61b6214b58d7450a06ca2de74f29df1eb8ea97bdb77", size = 636811, upload-time = "2026-05-22T02:18:02.208Z" },
-    { url = "https://files.pythonhosted.org/packages/a1/cf/6d7fe9ca7107ae8c25e0e84d605976df3429b54d4f04fb485b35264493e9/habluetooth-6.2.1-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:35ec1c23313c0f74315f4f673139ba250f8ce3f5ee5b285e2d2c187f08654cc7", size = 1376638, upload-time = "2026-05-22T02:18:03.753Z" },
-    { url = "https://files.pythonhosted.org/packages/67/96/39bdbd9cb89ffac35d35c558c5da8cce7ab3956795345dbccd688b03c614/habluetooth-6.2.1-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:94ef501085b768f330753899615eb832ec0e2bccff06aae72f6e25481fcaa78e", size = 1333989, upload-time = "2026-05-22T02:18:05.405Z" },
-    { url = "https://files.pythonhosted.org/packages/95/03/306b1179106c63c4b539221655759f3a3548b402d2febfff52682cbed04b/habluetooth-6.2.1-cp314-cp314t-musllinux_1_2_armv7l.whl", hash = "sha256:9a5fffdec4037745989b855f31b56838eb057a51a9a3be240544918eb030b54b", size = 654543, upload-time = "2026-05-22T02:18:06.928Z" },
-    { url = "https://files.pythonhosted.org/packages/83/86/44b8a4679cf7dc805d0cd65ba395db8cd7c09f2ad70b06217b322288838e/habluetooth-6.2.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:324be46bf17fc04c49822fd742cafea98ddc94d7c3ffe0aaaa790f9692c5092e", size = 1392190, upload-time = "2026-05-22T02:18:08.667Z" },
-    { url = "https://files.pythonhosted.org/packages/e1/29/25fd1970f206d5869dbbb833fb1743b336f700891d56484776751f7bfcf8/habluetooth-6.2.1-cp314-cp314t-win32.whl", hash = "sha256:ce282c93f09281864502ce6b491c389bbf1278c83d57756c7d9d16d3fd92ae72", size = 928280, upload-time = "2026-05-22T02:18:10.473Z" },
-    { url = "https://files.pythonhosted.org/packages/0c/f0/630f737209b7c7cbeec6991eb01039820ba339dd97f2015bd305d2be3746/habluetooth-6.2.1-cp314-cp314t-win_amd64.whl", hash = "sha256:149913f134cd94a9e5478420251a73ad98d9d89a50a6df4f23aabb9bffa48c98", size = 1092084, upload-time = "2026-05-22T02:18:12.266Z" },
+    { url = "https://files.pythonhosted.org/packages/03/fa/46e0d42252daa008ccc220dcfd07d1cd31603566ff5cce7b75961563f3d7/habluetooth-6.8.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:a8cf0c683c7922b53d0f876a12b9036c68b670fbaa3e28e3f911f42c9e9852fd", size = 790363, upload-time = "2026-05-29T15:51:32.652Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/45/e75c8b9ee9564f595ed72f3a414f5f590cbf89c833db0da5d672215ca09f/habluetooth-6.8.0-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:3f96d418c188ab387bf67647c20a49f83336df027df2a6332f6f8479910359c9", size = 925757, upload-time = "2026-05-29T15:51:34.144Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/27/86f43dee6d6a5ceaf1a64157ad4a697e22e789eb12c02f81edce9f04cdc3/habluetooth-6.8.0-cp314-cp314-manylinux2014_armv7l.manylinux_2_17_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:bea618effbe2a657ca3316c0381152c77c2d565f3b034a63753b2e5b9effc174", size = 888499, upload-time = "2026-05-29T15:51:35.623Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/68/def8850970d5231bc9746b917686ee59be8ae332ca46dc736344de64231f/habluetooth-6.8.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4e28842960debb24e934e4181962eddcc5b2982b406f1d63593ce68015f2bc8d", size = 980267, upload-time = "2026-05-29T15:51:37.099Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/6d/b4179085b60b38d1c0457ff371f3cf5de1b0d108c43797ece4956a2e669e/habluetooth-6.8.0-cp314-cp314-manylinux_2_41_x86_64.whl", hash = "sha256:03bd636b2999577eccb5a7121332a00199f80a0974bf26f8936695384d0019b1", size = 978879, upload-time = "2026-05-29T15:39:51.363Z" },
+    { url = "https://files.pythonhosted.org/packages/63/c3/4a333f8d0cf31e543e1eb11479c217e8a6104dbca1608062f604238c91e1/habluetooth-6.8.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:525e7c428fb9b61a33286061567e8d57ec9274c2d03fbd87b3770473df3b9054", size = 939452, upload-time = "2026-05-29T15:51:38.679Z" },
+    { url = "https://files.pythonhosted.org/packages/7e/fb/386e852fcb6416952bd12c406f0a31f6ae9dcde25e207d8d1d69adedd065/habluetooth-6.8.0-cp314-cp314-musllinux_1_2_armv7l.whl", hash = "sha256:33099ec175f0ac697f3e978296f5c8647af03c7a6df66c540095e3d81584e3e7", size = 896275, upload-time = "2026-05-29T15:51:40.294Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/3a/52879d699be82a1b0b78e4fb65ab4578e19764a2be180cdb83ae7ca301c5/habluetooth-6.8.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:f255b47ad9a507410c4e5620b8cd84d93bd8339c5d25d03da232e099fbf5094e", size = 989938, upload-time = "2026-05-29T15:51:41.767Z" },
+    { url = "https://files.pythonhosted.org/packages/13/c8/3a4f9c2acf0c9b5ba0aa95c3edceb1378138104574f92654bcd9d7e34988/habluetooth-6.8.0-cp314-cp314-win32.whl", hash = "sha256:9b6a3f48994f948ef7a73fa19f259d34a0cc7623a0b60e401ded632c8c946131", size = 642214, upload-time = "2026-05-29T15:51:43.305Z" },
+    { url = "https://files.pythonhosted.org/packages/62/04/d75ab18e92cace57a486f34d87c21dc6c04c4008f952545beffa92e4066d/habluetooth-6.8.0-cp314-cp314-win_amd64.whl", hash = "sha256:05977101c66c2a175e55c1f34b4076b4ceb72604d8d4370fc727c727c9689733", size = 742988, upload-time = "2026-05-29T15:51:44.652Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/4b/4dfd102fd5fc44245d64449d5048ba65977664112da30946261636c3c5e7/habluetooth-6.8.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:f9c16dc24aef1a728edba578ce5af9ec73b2bce2d85381bb048dd1a220b34067", size = 1556857, upload-time = "2026-05-29T15:51:46.141Z" },
+    { url = "https://files.pythonhosted.org/packages/34/3d/29b2b6a84f9ec1e8b0157c7c87dbbae2e08a3fabe211f83a67a8a906120b/habluetooth-6.8.0-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:c5490b8983b82b95e45f044bb6f4f30aa55ceff7f524000f843a148f7594e937", size = 1764021, upload-time = "2026-05-29T15:51:48.057Z" },
+    { url = "https://files.pythonhosted.org/packages/99/6a/3a84b793cbf564d2b0a65455b1a0b89e9e20e400bc46d9e6cd4ec46d44cb/habluetooth-6.8.0-cp314-cp314t-manylinux2014_armv7l.manylinux_2_17_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:aa139544e995c606d060d4fb6dd10ea330509312ad3ff7eee7513761f38ac7f5", size = 854688, upload-time = "2026-05-29T15:51:49.589Z" },
+    { url = "https://files.pythonhosted.org/packages/a9/62/201862e8b05c142d82c435124873b2811435c8004d38e7677ba2ab688e13/habluetooth-6.8.0-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:938a27d25c40b33f3b0e2fc9f7784b5a96b52213bb2dea46664f409f0605ea33", size = 1854537, upload-time = "2026-05-29T15:51:51.157Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/5b/4b2d25738fa222f1ce394fa374a984518c049a22cb18224e650cb96179ed/habluetooth-6.8.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:7e25fe4bd4fd49430c63ecf6ef9ae32171d34b42004e3ac5a50412166752e28c", size = 1793158, upload-time = "2026-05-29T15:51:52.93Z" },
+    { url = "https://files.pythonhosted.org/packages/1a/91/dfea35872922ac85cb81e4e994602de340073c091f967f9d9b136e400e36/habluetooth-6.8.0-cp314-cp314t-musllinux_1_2_armv7l.whl", hash = "sha256:1c2d26013d68607d36c10ffc42ba9d6f89fea81b25f8b53d1bf99edee976068b", size = 889712, upload-time = "2026-05-29T15:51:54.613Z" },
+    { url = "https://files.pythonhosted.org/packages/42/3e/990d5ba3b56fc1b9a2169d251f97d1ced377ce657592a8c75cbe45dc1094/habluetooth-6.8.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:d8aec3319d627498e4ab2af0fcc288ba1f43200d12874d5a7a9ecbb54124aab2", size = 1876142, upload-time = "2026-05-29T15:51:56.27Z" },
+    { url = "https://files.pythonhosted.org/packages/02/dc/56ba5baba1c4443809f1ea78cf5709574c18d51d637cdad0b8d94d4a2803/habluetooth-6.8.0-cp314-cp314t-win32.whl", hash = "sha256:187a0594f3496187fbe681568d5c2c442bee0af54b8988b29de97b2637af2b27", size = 1249880, upload-time = "2026-05-29T15:51:57.852Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/5e/cca7392a1a125f3eaa89428d5f1cdc9a83f61a4d338c22f123c17f236741/habluetooth-6.8.0-cp314-cp314t-win_amd64.whl", hash = "sha256:7415a8f339daea03278427a9a44fd7cc69252254730ee5cd01d9118a8a7ab647", size = 1459434, upload-time = "2026-05-29T15:51:59.594Z" },
 ]
 
 [[package]]
@@ -1045,11 +1045,11 @@ wheels = [
 
 [[package]]
 name = "idna"
-version = "3.16"
+version = "3.17"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1a/88/bcf9709822fe69d02c2a6a77956c98ce6ea8ca8767a9aadcedc7eb6a2390/idna-3.16.tar.gz", hash = "sha256:d7a6da03db833450fca25d2358ac9ff06cd624577a4aea3a596d5c0f77b8e03d", size = 203770, upload-time = "2026-05-22T00:16:18.781Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b9/28/99c51f664567218d824af024c0251650fb27e4ca066df188dab0769c5b91/idna-3.17.tar.gz", hash = "sha256:5eb0cb53bc467c12eadcf6de83163ad8527cec9416f44b9b61b19caedad2b87f", size = 196048, upload-time = "2026-05-28T14:32:38.55Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/16/70255075a9859a0e3adb789b68ceb0e210dec03934245fd98d248226572f/idna-3.16-py3-none-any.whl", hash = "sha256:cc246e3a3f89580c3a951b5ad298ca4638078b2cdd4f115654332b5c26daded5", size = 74165, upload-time = "2026-05-22T00:16:16.698Z" },
+    { url = "https://files.pythonhosted.org/packages/de/a7/f76514cc40ad6234098ecdebda08732d75964776c51a42845b7da10649e2/idna-3.17-py3-none-any.whl", hash = "sha256:466e48829084efe2548012b855df21540b96f2e20e51bd124c851536556a592c", size = 65316, upload-time = "2026-05-28T14:32:37.035Z" },
 ]
 
 [[package]]
@@ -1202,14 +1202,14 @@ wheels = [
 
 [[package]]
 name = "mashumaro"
-version = "3.21"
+version = "3.22"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ee/61/bdbd92fd7684f31fe18982f5a3b9a6ab672ae81a7f52b8aceecb56143430/mashumaro-3.21.tar.gz", hash = "sha256:9bc53b0c7dbed0be80e3ccc3efe1d621ce146b4b7a673ec41ba001a417f2c4b4", size = 195595, upload-time = "2026-05-07T16:32:35.809Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/e3/a06dcd2e6df094c5e294721926f1f76da30f50823e2ac233a9198e804891/mashumaro-3.22.tar.gz", hash = "sha256:64538cc365204402a060ebde683a86505b5a4344acf6870d79021e9fbfe57360", size = 197845, upload-time = "2026-05-26T14:39:21.859Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/2e/d6a3410c11ac71e6031d7779d20700b43866e8166d56be86cf8bfcbb15de/mashumaro-3.21-py3-none-any.whl", hash = "sha256:b8e11e259a77d1c6e277c17909381448750956acee1eb79014b06704a10053d6", size = 95250, upload-time = "2026-05-07T16:32:34.341Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/1c/92fd926c2e7763535454683250dbdd8d10aa2f2c62f58d6abbcce4d8b3fc/mashumaro-3.22-py3-none-any.whl", hash = "sha256:17dc4d7294c33ef380a8b929dda0608577aa2141988c00a0c4932310108fe71d", size = 95916, upload-time = "2026-05-26T14:39:20.233Z" },
 ]
 
 [[package]]
@@ -1816,14 +1816,14 @@ wheels = [
 
 [[package]]
 name = "s3transfer"
-version = "0.17.0"
+version = "0.18.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9b/ec/7c692cde9125b77e84b307354d4fb705f98b8ccad59a036d5957ca75bfc3/s3transfer-0.17.0.tar.gz", hash = "sha256:9edeb6d1c3c2f89d6050348548834ad8289610d886e5bf7b7207728bd43ce33a", size = 155337, upload-time = "2026-04-29T22:07:36.33Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/1f/12417f7f493fc45e1f9fd5d4a9b6c125cf8d2cf3f8ddbdfab3e76406e9d6/s3transfer-0.18.0.tar.gz", hash = "sha256:3760b8b7ec1315da54048b2d626276732bee4300d054d492d4e1d43e20d4ecbd", size = 160560, upload-time = "2026-05-28T19:39:09.124Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/72/c6c32d2b657fa3dad1de340254e14390b1e334ce38268b7ad51abda3c8c2/s3transfer-0.17.0-py3-none-any.whl", hash = "sha256:ce3801712acf4ad3e89fb9990df97b4972e93f4b3b0004d214be5bce12814c20", size = 86811, upload-time = "2026-04-29T22:07:34.966Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/58/a58fc997655386daa2e25784e30c288aa3e3819e401f77029ee4899fb55a/s3transfer-0.18.0-py3-none-any.whl", hash = "sha256:239c13b09e65ad0346e1be7348b8a202dcad44ac7ea7c6eb858fc881dce739b6", size = 88572, upload-time = "2026-05-28T19:39:07.999Z" },
 ]
 
 [[package]]
@@ -2033,11 +2033,11 @@ wheels = [
 
 [[package]]
 name = "usb-devices"
-version = "0.4.5"
+version = "0.5.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/25/48/dbe6c4c559950ebebd413e8c40a8a60bfd47ddd79cb61b598a5987e03aad/usb_devices-0.4.5.tar.gz", hash = "sha256:9b5c7606df2bc791c6c45b7f76244a0cbed83cb6fa4c68791a143c03345e195d", size = 5421, upload-time = "2023-12-16T19:59:53.295Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ef/93/76be49b956574f75c9b907193732ff2b6b8f7075692adde93a7f151b30e5/usb_devices-0.5.1.tar.gz", hash = "sha256:8ef45c401490391a3651b3ba748eb213a654ac165be10a0786ab963668c49cc3", size = 5365, upload-time = "2026-05-27T18:01:56.115Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/c9/26171ae5b78d72dd006bbc51ca9baa2cbb889ae8e91608910207482108fd/usb_devices-0.4.5-py3-none-any.whl", hash = "sha256:8a415219ef1395e25aa0bddcad484c88edf9673acdeae8a07223ca7222a01dcf", size = 5349, upload-time = "2023-12-16T19:59:51.604Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/12/f8dd0bd25e9e2ab747b47ae4efed08de75f595f6136a71bafaf3db0c47ed/usb_devices-0.5.1-py3-none-any.whl", hash = "sha256:e77e7972b5ac6a883b3778b0273d9582c5b8ae847ac78fba3d080dd4a4cc69ad", size = 5423, upload-time = "2026-05-27T18:01:55.012Z" },
 ]
 
 [[package]]
