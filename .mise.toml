@@ -1,6 +1,6 @@
 [tools]
 python = "3.14"
-uv = "0.12.21"
+uv = "0.13.0"
 
 [settings]
 idiomatic_version_file_enable_tools = []
