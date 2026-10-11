@@ -1,5 +1,5 @@
 {
   "name": "Scaleway Object Storage",
-  "homeassistant": "2026.7.1",
+  "homeassistant": "2026.10.1",
   "render_readme": true
 }

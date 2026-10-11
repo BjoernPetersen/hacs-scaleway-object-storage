@@ -2,7 +2,6 @@
 
 from typing import TYPE_CHECKING, Any
 
-import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, OptionsFlow, OptionsFlowWithReload
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import section
@@ -15,6 +14,7 @@ from homeassistant.helpers.selector import (
     TextSelectorConfig,
     TextSelectorType,
 )
+from probatio import Optional, Required, Schema, Secret
 
 from . import ScalewayConfigEntry, exceptions, helpers
 from .const import (
@@ -33,23 +33,23 @@ if TYPE_CHECKING:
 
     from homeassistant.config_entries import ConfigFlowResult
 
-SECTION_CREDENTIALS_SCHEMA = vol.Schema(
+SECTION_CREDENTIALS_SCHEMA = Schema(
     {
-        vol.Required(CONF_ACCESS_KEY_ID): cv.string,
-        vol.Required(CONF_SECRET_KEY): TextSelector(
+        Required(CONF_ACCESS_KEY_ID): cv.string,
+        Required(Secret(CONF_SECRET_KEY)): TextSelector(
             TextSelectorConfig(type=TextSelectorType.PASSWORD)
         ),
     }
 )
 
-STEP_REAUTH_DATA_SCHEMA = vol.Schema(
-    {vol.Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA)}
+STEP_REAUTH_DATA_SCHEMA = Schema(
+    {Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA)}
 )
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
+STEP_USER_DATA_SCHEMA = Schema(
     {
-        vol.Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA),
-        vol.Required(CONF_REGION, default="fr-par"): SelectSelector(
+        Required(CONF_SECTION_CREDENTIALS): section(SECTION_CREDENTIALS_SCHEMA),
+        Required(CONF_REGION, default="fr-par"): SelectSelector(
             SelectSelectorConfig(
                 translation_key="regions",
                 options=[
@@ -60,14 +60,14 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
                 ],
             )
         ),
-        vol.Required(CONF_BUCKET): cv.string,
-        vol.Optional(CONF_OBJECT_PREFIX, default=""): cv.string,
+        Required(CONF_BUCKET): cv.string,
+        Optional(CONF_OBJECT_PREFIX, default=""): cv.string,
     }
 )
 
-OPTIONS_SCHEMA = vol.Schema(
+OPTIONS_SCHEMA = Schema(
     {
-        vol.Required("storage_class", default="STANDARD"): SelectSelector(
+        Required("storage_class", default="STANDARD"): SelectSelector(
             SelectSelectorConfig(
                 translation_key="storage_classes",
                 options=[
