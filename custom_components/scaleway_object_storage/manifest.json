@@ -17,6 +17,6 @@
     "aiohttp_s3_client"
   ],
   "requirements": [
-    "aiohttp-s3-client==1.1.2"
+    "aiohttp-s3-client==1.2.0"
   ]
 }

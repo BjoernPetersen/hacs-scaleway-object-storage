@@ -151,15 +151,15 @@ wheels = [
 
 [[package]]
 name = "aiohttp-s3-client"
-version = "1.1.2"
+version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "aws-request-signer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f4/71/41a36cbd8a6e2f85f93ff0ae68b29209c6d1996a9e53f97a74fd2edafab8/aiohttp_s3_client-1.1.2.tar.gz", hash = "sha256:8cde1ab7c1b4f759ef33b528d45ac08b6243e964d10e306562ffa70c28793050", size = 17833, upload-time = "2026-03-11T11:32:05.653Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5e/50/952717d5c53f8dea89353aba055b5aceb947368be9639b4e3eeaf02bcba6/aiohttp_s3_client-1.2.0.tar.gz", hash = "sha256:3d3277a39a4ee2492b5ad2d287d35beaf3824c0ae501cbbda66af33c0072b912", size = 19683, upload-time = "2026-10-18T11:50:20.013Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/e4/ed9e8288c0ab1cb20cef6ae80243f429f180be12bc5b080fe711691e471b/aiohttp_s3_client-1.1.2-py3-none-any.whl", hash = "sha256:2f05c8ee337557ce97ba26d2a55897791d3031a865044609fd63b734e601334d", size = 20517, upload-time = "2026-03-11T11:32:06.665Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/ed/a28ed3211e98ae6c6738d1d0218c3615596f509f1b9e402f94b5c78606ce/aiohttp_s3_client-1.2.0-py3-none-any.whl", hash = "sha256:2942d2c1a2cdde51c004e98f43bee6583812eb95d1ac443fec903867e0cdf877", size = 21620, upload-time = "2026-10-18T11:50:18.581Z" },
 ]
 
 [[package]]
@@ -1949,7 +1949,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "aiohttp-s3-client", specifier = "==1.1.2" }]
+requires-dist = [{ name = "aiohttp-s3-client", specifier = "==1.2.0" }]
 
 [package.metadata.requires-dev]
 dev = [
