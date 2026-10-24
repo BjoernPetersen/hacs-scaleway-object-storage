@@ -13,7 +13,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "homeassistant==2026.10.2",
+    "homeassistant==2026.10.3",
     "mypy ==2.4.0",
     "pytest ==9.1.1",
     "pytest-asyncio==1.4.0",
