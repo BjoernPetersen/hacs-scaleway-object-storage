@@ -22,7 +22,7 @@ jobs:
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
-      python-version: '3.14'
+      python-version: '3.15'
       debian-version: trixie
 
   test:
@@ -30,7 +30,7 @@ jobs:
     # TODO: fix this job (aiobotocore transitive deps don't have wheels)
     if: false
     with:
-      python-version: '3.14'
+      python-version: '3.15'
       debian-version: trixie
 
   all-checks-passed:
